@@ -744,6 +744,52 @@ button[id*="Dark"] {
   font-weight: bold !important;
 }
 
+/* ==========================================
+   CORRECCIÓN DE COLORES DE ACIERTO Y FALLO EN MODO OSCURO
+   ========================================== */
+body.dark-mode .answer.answer-correct,
+body.dark-mode .correct {
+  background-color: #064e3b !important; /* Un verde oscuro profundo y elegante */
+  border-color: #10b981 !important;     /* Borde verde brillante */
+  color: #6ee7b7 !important;            /* Texto verde claro muy legible */
+}
+
+body.dark-mode .answer.answer-wrong,
+body.dark-mode .incorrect {
+  background-color: #7f1d1d !important; /* Un rojo oscuro profundo */
+  border-color: #ef4444 !important;     /* Borde rojo brillante */
+  color: #fca5a5 !important;            /* Texto rojo claro muy legible */
+}
+
+/* Asegurar que al pasar el mouse por encima de una respuesta ya evaluada no pierda su color en modo oscuro */
+body.dark-mode .answer.answer-correct:hover,
+body.dark-mode .answer.answer-wrong:hover {
+  color: inherit !important;
+}
+
+/* ==========================================
+   CORRECCIÓN DE RESULTADOS DE ESCRITURA EN MODO OSCURO
+   ========================================== */
+body.dark-mode .write-result-box.write-ok {
+  background-color: #064e3b !important;
+  border-color: #10b981 !important;
+  color: #6ee7b7 !important;
+}
+
+body.dark-mode .write-result-box.write-bad {
+  background-color: #7f1d1d !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+body.dark-mode .write-typed-correct,
+body.dark-mode .write-correct-answer {
+  color: #6ee7b7 !important;
+}
+
+body.dark-mode .write-typed-wrong {
+  color: #fca5a5 !important;
+}	  
 
   </style>
 </head>
@@ -1037,7 +1083,57 @@ button[id*="Dark"] {
   </div>
 
   <script>
-  
+
+// 1. Guardar preferencias (por ID o por posición en la página)
+  document.addEventListener('change', (event) => {
+    const target = event.target;
+    if (target.type === 'checkbox' || target.tagName === 'SELECT') {
+      // Identificamos el elemento por su id, o si no tiene, por su tipo y orden exacto en la página
+      const allCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+      const allSelects = Array.from(document.querySelectorAll('select'));
+      
+      let key = '';
+      if (target.id) {
+        key = 'pref_' + target.id;
+      } else if (target.type === 'checkbox') {
+        key = 'pref_chk_index_' + allCheckboxes.indexOf(target);
+      } else if (target.tagName === 'SELECT') {
+        key = 'pref_sel_index_' + allSelects.indexOf(target);
+      }
+
+      if (key) {
+        const val = target.type === 'checkbox' ? target.checked : target.value;
+        localStorage.setItem(key, val);
+      }
+    }
+  });
+
+  // 2. Restaurar preferencias al cargar la página
+  window.addEventListener('DOMContentLoaded', () => {
+    const allCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+    const allSelects = Array.from(document.querySelectorAll('select'));
+
+    // Restaurar checkboxes
+    allCheckboxes.forEach((chk, index) => {
+      let key = chk.id ? 'pref_' + chk.id : 'pref_chk_index_' + index;
+      const savedValue = localStorage.getItem(key);
+      if (savedValue !== null) {
+        chk.checked = (savedValue === 'true');
+        chk.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+
+    // Restaurar selects (incluyendo voces y opciones)
+    allSelects.forEach((sel, index) => {
+      let key = sel.id ? 'pref_' + sel.id : 'pref_sel_index_' + index;
+      const savedValue = localStorage.getItem(key);
+      if (savedValue !== null) {
+        sel.value = savedValue;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  });
+	  
   // Cargar el idioma guardado al iniciar la aplicación
 window.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem('language');
