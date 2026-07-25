@@ -1083,7 +1083,31 @@ body.dark-mode .write-typed-wrong {
   </div>
 
   <script>
+// 1. Al cargar la página, restaurar el estado de cada acordeón según su número de orden (índice)
+window.addEventListener('DOMContentLoaded', () => {
+  const allDetails = document.querySelectorAll('details');
+  
+  allDetails.forEach((details, index) => {
+    const savedState = localStorage.getItem('accordion_index_' + index);
+    if (savedState !== null) {
+      details.open = (savedState === 'true');
+    }
+  });
+});
 
+// 2. Cada vez que el usuario abra o cierre CUALQUIER acordeón, guardamos su posición exacta
+document.addEventListener('toggle', (event) => {
+  const target = event.target;
+  if (target.tagName === 'DETAILS') {
+    const allDetails = Array.from(document.querySelectorAll('details'));
+    const index = allDetails.indexOf(target);
+    
+    if (index !== -1) {
+      localStorage.setItem('accordion_index_' + index, target.open);
+    }
+  }
+}, true);
+	  
 // 1. Guardar preferencias (por ID o por posición en la página)
   document.addEventListener('change', (event) => {
     const target = event.target;
@@ -1147,30 +1171,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// 1. Al cargar la página, restaurar el estado de cada acordeón según su número de orden (índice)
-window.addEventListener('DOMContentLoaded', () => {
-  const allDetails = document.querySelectorAll('details');
-  
-  allDetails.forEach((details, index) => {
-    const savedState = localStorage.getItem('accordion_index_' + index);
-    if (savedState !== null) {
-      details.open = (savedState === 'true');
-    }
-  });
-});
-
-// 2. Cada vez que el usuario abra o cierre CUALQUIER acordeón, guardamos su posición exacta
-document.addEventListener('toggle', (event) => {
-  const target = event.target;
-  if (target.tagName === 'DETAILS') {
-    const allDetails = Array.from(document.querySelectorAll('details'));
-    const index = allDetails.indexOf(target);
-    
-    if (index !== -1) {
-      localStorage.setItem('accordion_index_' + index, target.open);
-    }
-  }
-}, true);
 
 // Guardar el estado automáticamente cuando el usuario abra o cierre cualquiera
 document.addEventListener('toggle', (event) => {
