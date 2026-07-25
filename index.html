@@ -3294,61 +3294,61 @@ if((document.getElementById('autoSpeak').checked || current.mode.startsWith('aud
       }
     }
 
-function initVoices(){
-  const select = document.getElementById('voiceSelect');
-  if (!select) return;
+    function initVoices(){
+      const select = document.getElementById('voiceSelect');
+      voices = speechSynthesis.getVoices();
+      select.innerHTML = '';
 
-  voices = speechSynthesis.getVoices();
-  select.innerHTML = '';
-
-  if(!voices.length){
-    const op = document.createElement('option');
-    op.value = '';
-    op.textContent = 'System voice';
-    select.appendChild(op);
-    
-    // IMPORTANTE: Si la lista está vacía al arrancar, forzamos a que vuelva a intentarlo 
-    // en cuanto el navegador termine de cargar las voces en segundo plano.
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        initVoices();
-      };
-    }
-    return;
-  }
-
-  const enVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
-  const finalVoices = enVoices.length ? enVoices : voices;
-
-  finalVoices.forEach(v => {
-    const op = document.createElement('option');
-    op.value = v.name;
-    op.textContent = `${v.name} (${v.lang})`;
-    select.appendChild(op);
-  });
-
-  // 1. Restaurar la voz desde tu STATE_KEY existente
-  try{
-    const raw = localStorage.getItem(STATE_KEY);
-    if(raw){
-      const state = JSON.parse(raw);
-      if(state.settings && state.settings.voice) {
-        select.value = state.settings.voice;
+      if(!voices.length){
+        const op = document.createElement('option');
+        op.value = '';
+        op.textContent = 'System voice';
+        select.appendChild(op);
+        return;
       }
-    }
-  }catch(e){}
 
-  // Si por alguna razón el valor guardado no coincide exacto con los nombres de la lista,
-  // nos aseguramos de reflejar lo que quedó seleccionado en el estado
-  select.onchange = () => {
+      const enVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
+      const finalVoices = enVoices.length ? enVoices : voices;
+
+      finalVoices.forEach(v => {
+        const op = document.createElement('option');
+        op.value = v.name;
+        op.textContent = `${v.name} (${v.lang})`;
+        select.appendChild(op);
+      });
+
+      try{
+        const raw = localStorage.getItem(STATE_KEY);
+        if(raw){
+          const state = JSON.parse(raw);
+          if(state.settings && state.settings.voice) select.value = state.settings.voice;
+        }
+      }catch(e){}
+	// --- FORZAR VALOR GUARDADO A PRUEBA DE FALLOS ---
+  setTimeout(() => {
     try {
-      const raw = localStorage.getItem(STATE_KEY) || '{}';
-      const state = JSON.parse(raw);
-      if (!state.settings) state.settings = {};
-      state.settings.voice = select.value;
-      localStorage.setItem(STATE_KEY, JSON.stringify(state));
-    } catch(e){}
-  };
+      const raw = localStorage.getItem(STATE_KEY);
+      if(raw) {
+        const state = JSON.parse(raw);
+        if(state.settings && state.settings.voice) {
+          const select = document.getElementById('voiceSelect');
+          if (select) {
+            select.value = state.settings.voice;
+            // Si el navegador no encuentra exactamente el mismo texto exacto, 
+            // al menos seleccionamos la primera opción que coincida parcialmente
+            if (select.value !== state.settings.voice) {
+              for(let opt of select.options) {
+                if(opt.value.includes(state.settings.voice) || state.settings.voice.includes(opt.value)) {
+                  select.value = opt.value;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  }, 100);
 }
 
 // Asegurarnos de dispararlo también al cargar la ventana
