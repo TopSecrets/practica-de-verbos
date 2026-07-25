@@ -1,0 +1,3562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practica de verbos</title>
+  <style>
+:root {
+      --bg:#f4f7fb;
+      --card:#fff;
+      --muted:#6b7280;
+      --text:#111827;
+      --primary:#2563eb;
+      --primary2:#1d4ed8;
+      --okbg:#dcfce7;
+      --oktx:#166534;
+      --badbg:#fee2e2;
+      --badtx:#991b1b; 
+      --line:#dbe4f0;
+      --soft:#eef3ff;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: var(--text);
+      padding: 16px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .wrap {
+      max-width:1180px;
+      margin:0 auto;
+      background:var(--card);
+      border-radius:16px;
+      box-shadow:0 10px 35px rgba(0,0,0,.08);
+      padding:18px;
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    h1 { margin:0 0 6px; }
+    .sub { color:var(--muted); margin:0 0 16px; }
+    .grid { display:grid; gap:12px; }
+
+    .stats {
+      grid-template-columns:repeat(6,1fr);
+      margin-bottom:14px;
+    }
+
+    .stat {
+      background:var(--soft);
+      border-radius:12px;
+      padding:12px;
+      text-align:center;
+      font-weight:700;
+    }
+
+    .stat small {
+      display:block;
+      color:var(--muted);
+      font-weight:400;
+      margin-bottom:4px;
+    }
+
+    .card {
+      border:1px solid #e5e7eb;
+      border-radius:16px;
+      padding:18px;
+      background:#fbfdff;
+      margin-bottom:14px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    select, button, input[type="text"] {
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      font-size:15px;
+      background:#fff;
+      color: var(--text);
+    }
+
+    button {
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    button:hover { background:var(--primary2); }
+
+    button.secondary {
+      background:#334155;
+      color: #fff;
+    }
+
+    button.secondary:hover {
+      background:#1f2937;
+    }
+
+    .inline {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:stretch;
+    }
+
+    .inline > * { flex:1; }
+
+    .small { color:var(--muted); font-size:14px; }
+    .label { font-size:13px; color:var(--muted); margin-bottom:6px; }
+
+    .question {
+      font-size:34px;
+      font-weight:700;
+      margin:8px 0 6px;
+      word-break:break-word;
+    }
+
+    .prompt {
+      font-size:16px;
+      margin-bottom:8px;
+      color:#374151;
+    }
+
+    .pron {
+      font-size:16px;
+      color:#0f766e;
+      margin:4px 0;
+      min-height:22px;
+    }
+
+    .translation {
+      font-size:16px;
+      color:#7c3aed;
+      margin:4px 0 8px;
+      min-height:22px;
+      font-weight:600;
+    }
+
+    .meta {
+      color:var(--muted);
+      font-size:14px;
+      margin-bottom:14px;
+    }
+
+    .answers {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .answer {
+      text-align:left;
+      min-height:58px;
+      border:2px solid var(--line);
+      color:var(--text);
+      background:#fff;
+    }
+
+    .answer:hover {
+      background:#eff6ff;
+      color:var(--text);
+    }
+
+    .answer.answer-correct {
+      background:var(--okbg) !important;
+      border-color:#22c55e !important;
+      color:var(--oktx) !important;
+    }
+
+    .answer.answer-wrong {
+      background:var(--badbg) !important;
+      border-color:#ef4444 !important;
+      color:var(--badtx) !important;
+    }
+
+    .answer.answer-correct:hover,
+    .answer.answer-wrong:hover {
+      color:inherit;
+    }
+
+    .feedback {
+      display:none;
+      margin-top:14px;
+      padding:14px;
+      border-radius:12px;
+      font-weight:700;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+
+    .correct { background:var(--okbg); color:var(--oktx); }
+    .incorrect { background:var(--badbg); color:var(--badtx); }
+
+    .write-result-box {
+      width:100%;
+      min-height:46px;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #cbd5e1;
+      font-size:15px;
+      background:#fff;
+      line-height:1.4;
+      box-sizing:border-box;
+      display:none;
+    }
+
+    .write-result-box.write-ok {
+      border-color:#22c55e;
+      background:var(--okbg);
+    }
+
+    .write-result-box.write-bad {
+      border-color:#ef4444;
+      background:#fff;
+    }
+
+    .write-typed-correct {
+      color:var(--oktx);
+      font-weight:700;
+    }
+
+    .write-typed-wrong {
+      color:var(--badtx);
+      font-weight:700;
+    }
+
+    .write-correct-answer {
+      color:var(--oktx);
+      font-weight:700;
+      margin-left:12px;
+      display:inline-block;
+    }
+
+    .history {
+      max-height:220px;
+      overflow:auto;
+      padding-left:18px;
+      margin:8px 0 0;
+    }
+
+    .timer { font-weight:700; color:#b45309; }
+    .footer { color:var(--muted); font-size:13px; margin-top:6px; }
+
+    .tag {
+      display:inline-block;
+      background:#e0e7ff;
+      color:#3730a3;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:12px;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    label.check {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:14px;
+      min-height:46px;
+      color: var(--text);
+    }
+
+    label.check input {
+      width:auto;
+      flex:0 0 auto;
+    }
+
+    .checks {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:10px;
+    }
+
+    .formsBlock {
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .formLine {
+      padding:8px 0;
+      border-bottom:1px solid #edf2f7;
+    }
+
+    .formWord {
+      font-weight:700;
+    }
+
+    .progressOuter {
+      width:100%;
+      height:18px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progressInner {
+      height:100%;
+      width:0%;
+      background:#2563eb;
+      transition:width .25s ease;
+    }
+
+    .miniList {
+      min-height:120px;
+      max-height:220px;
+      overflow:auto;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      padding:10px;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .wordTag {
+      display:inline-block;
+      margin:4px 6px 0 0;
+      padding:4px 8px;
+      background:#e0e7ff;
+      color:#3730a3;
+      border-radius:999px;
+      font-size:12px;
+    }
+
+    .wordTag.pending {
+      background:#f3f4f6;
+      color:#374151;
+    }
+
+    .loading { color:#92400e; }
+
+    .topActions {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .accordion { margin-bottom:14px; }
+
+    .accordion details {
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      background:#ffffff;
+      margin-bottom:10px;
+      overflow:hidden;
+      box-shadow:0 1px 3px rgba(15,23,42,0.06);
+      transition:border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    }
+
+    .accordion details[open] {
+      border-color:#cbd5e1;
+      box-shadow:0 2px 8px rgba(15,23,42,0.08);
+    }
+
+    .accordion summary {
+      list-style:none;
+      cursor:pointer;
+      padding:14px 16px;
+      font-weight:800;
+      background:#f8fafc;
+      border-bottom:1px solid #e5e7eb;
+      position:relative;
+      transition:background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      user-select:none;
+      outline:none;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:50px;
+      color:#0f172a;
+    }
+
+    .accordion summary::before {
+      content:"";
+      width:10px;
+      height:10px;
+      border-right:3px solid #64748b;
+      border-bottom:3px solid #64748b;
+      transform:rotate(45deg);
+      transition:transform 0.18s ease, border-color 0.18s ease;
+      flex:0 0 auto;
+      margin-top:-4px;
+    }
+
+    .accordion details[open] > summary {
+      background:#f1f5f9;
+      border-bottom-color:#e2e8f0;
+    }
+
+    .accordion details[open] > summary::before {
+      transform:rotate(225deg);
+      margin-top:4px;
+      border-color:#334155;
+    }
+
+    .accordion summary:hover {
+      background:#f1f5f9;
+    }
+
+    .accordion summary:focus-visible {
+      box-shadow:0 0 0 3px rgba(100,116,139,0.25);
+      z-index:1;
+    }
+
+    .accordion summary::-webkit-details-marker {
+      display:none;
+    }
+
+    .accordion .accordionBody {
+      padding:14px 16px;
+      border-top:1px solid #e5e7eb;
+      background:#ffffff;
+      transition: background-color 0.18s ease;
+    }
+
+    .questionActions {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .questionActions button { width:100%; }
+
+    .compactGrid {
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(2,1fr);
+    }
+
+    .modeGroups {
+      display:grid;
+      gap:14px;
+    }
+
+    .modeGroup {
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      background:#fff;
+      padding:12px;
+      transition: background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .modeGroupHeader {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .modeGroupTitle {
+      font-weight:700;
+      color:#1f2937;
+    }
+
+    .modeGroupActions {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .modeGroupActions button {
+      width:auto;
+      padding:8px 10px;
+      font-size:13px;
+    }
+
+    .answerMain {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .answerMeta {
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .answerIpa, .answerApprox {
+      color: #0f766e;
+    }
+
+    .answerTranslation {
+      color: #7c3aed;
+    }
+
+    .ipaLegend {
+      margin-top:16px;
+      border-top:1px solid #edf2f7;
+      padding-top:12px;
+    }
+
+    .ipaLegend summary {
+      cursor:pointer;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .ipaLegend table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+
+    .ipaLegend th,
+    .ipaLegend td {
+      border-bottom:1px solid #edf2f7;
+      padding:8px;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    .ipaLegend code {
+      font-size:15px;
+      font-weight:700;
+    }
+
+    @media (max-width:900px){
+      .stats, .answers { grid-template-columns:1fr 1fr; }
+      #masteryListsWrap { grid-template-columns:1fr !important; }
+    }
+
+    @media (max-width:700px){
+      .topActions, .compactGrid, .stats, .answers { grid-template-columns:1fr; }
+      .question { font-size:28px; }
+      body { padding:10px; }
+      .wrap { padding:14px; }
+    }
+	
+    @keyframes blinking {
+      0%, 49% { color: inherit; }
+      50%, 100% { color: #2563eb; }
+    }
+
+    .blink {
+      animation: blinking 1s infinite step-end;
+    }
+
+    .ui-btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background-color: #f8fafc;
+      color: #1e293b;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .ui-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    /* ==========================================
+       MODO OSCURO CORREGIDO Y COMPLETO
+       ================================---------- */
+    body.dark-mode {
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+
+    /* Contenedor central, tarjetas, acordeones y paneles */
+    body.dark-mode .wrap,
+    body.dark-mode .card,
+    body.dark-mode .accordion details,
+    body.dark-mode .accordion .accordionBody,
+    body.dark-mode .modeGroup,
+    body.dark-mode .stat,
+    body.dark-mode label.check,
+    body.dark-mode .miniList,
+    body.dark-mode select, 
+    body.dark-mode input[type="text"],
+    body.dark-mode .write-result-box {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+
+    /* Cabeceras de acordeones y elementos especiales abiertos en modo oscuro */
+    body.dark-mode .accordion summary,
+    body.dark-mode .accordion details[open] > summary {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border-bottom-color: #334155 !important;
+    }
+
+    /* Todos los textos, títulos y etiquetas dentro del modo oscuro */
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode h4,
+    body.dark-mode p,
+    body.dark-mode span,
+    body.dark-mode label,
+    body.dark-mode .label,
+    body.dark-mode summary,
+    body.dark-mode .modeGroupTitle,
+    body.dark-mode .prompt,
+    body.dark-mode .stat small {
+      color: #f8fafc !important;
+    }
+
+    /* Textos secundarios o silenciados */
+    body.dark-mode small, 
+    body.dark-mode .text-muted,
+    body.dark-mode .sub,
+    body.dark-mode .meta {
+      color: #94a3b8 !important;
+    }
+
+    /* Botones principales y de interfaz en modo oscuro */
+    body.dark-mode .ui-btn,
+    body.dark-mode button:not(.answer) {
+      background-color: #334155 !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-mode .ui-btn:hover,
+    body.dark-mode button:not(.answer):hover {
+      background-color: #475569 !important;
+    }
+
+    /* Opciones de respuesta por defecto en modo oscuro */
+    body.dark-mode .answer {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-mode .answer:hover {
+      background-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+	
+	/* Mantener los botones principales en azul brillante en modo oscuro */
+body.dark-mode button:not(.secondary):not(.answer):not(.ui-btn) {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+body.dark-mode button:not(.secondary):not(.answer):not(.ui-btn):hover {
+  background-color: #1d4ed8 !important;
+}
+
+/* Forzar colores correctos en los tags de palabras (dominadas y pendientes) en modo oscuro */
+body.dark-mode .wordTag {
+  background-color: #1e3a8a !important; /* Azul oscuro elegante */
+  color: #93c5fd !important;          /* Azul claro legible */
+}
+
+body.dark-mode .wordTag.pending {
+  background-color: #334155 !important; /* Gris oscuro */
+  color: #cbd5e1 !important;          /* Texto gris claro */
+}
+
+/* Forzar subtítulos, contadores y textos sueltos en modo oscuro */
+body.dark-mode .sub,
+body.dark-mode .meta,
+body.dark-mode .prompt,
+body.dark-mode .small,
+body.dark-mode .footer,
+body.dark-mode .timer,
+body.dark-mode div:not([class]),
+body.dark-mode span:not([class]) {
+  color: #cbd5e1 !important;
+}
+
+/* Listas y contenedores internos de palabras */
+body.dark-mode .miniList {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+/* Forzar que las cajas o "burbujas" de metadatos y subtítulos cambien de fondo en modo oscuro */
+body.dark-mode .meta,
+body.dark-mode .sub,
+body.dark-mode div.meta,
+body.dark-mode div.sub {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+/* Asegurar que las etiquetas de estado internas no mantengan un fondo extraño */
+body.dark-mode #modeTag,
+body.dark-mode #answerTag,
+body.dark-mode #timerText {
+  background-color: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+/* Forzar que el contenedor con la clase .tag se adapte al modo oscuro */
+body.dark-mode .tag {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Asegurar que el texto del temporizador dentro del tag sea visible */
+body.dark-mode .tag #timerText {
+  color: #e2e8f0 !important;
+}
+
+/* Centrar el título principal y el subtítulo */
+#appTitle,
+#appSubtitle {
+  text-align: center !important;
+  display: block;
+  width: 100%;
+}
+
+/* Poner en negrita los textos de los botones de idioma y modo oscuro */
+.btn-lang,
+.btn-dark-mode,
+button[id*="Lang"],
+button[id*="Dark"] {
+  font-weight: bold !important;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 id="appTitle">Practica de verbos</h1>
+    <p class="sub" id="appSubtitle">Practice verbs with combined modes, per-verb progress, and collapsible sections.</p>
+
+    <div class="grid stats">
+      <div class="stat"><small id="statCorrectLabel">Correct</small><span id="correctCount">0</span></div>
+      <div class="stat"><small id="statWrongLabel">Wrong</small><span id="wrongCount">0</span></div>
+      <div class="stat"><small id="statAnsweredLabel">Answered</small><span id="totalCount">0</span></div>
+      <div class="stat"><small id="statAccuracyLabel">Accuracy</small><span id="accuracy">0%</span></div>
+      <div class="stat"><small id="statStreakLabel">Streak</small><span id="streak">0</span></div>
+      <div class="stat"><small id="statBestStreakLabel">Best streak</small><span id="bestStreak">0</span></div>
+    </div>
+
+    <div class="accordion">
+      <details open>
+        <summary id="summaryInterface" title="Abrir o cerrar esta sección">Interface</summary>
+        <div class="accordionBody">
+  <div>
+    <div class="interface-controls" style="display: flex; gap: 10px; margin-top: 5px;">
+      <button id="toggleLangBtn" class="ui-btn" onclick="toggleLanguage()">Idioma: Español</button>
+      <button id="toggleDarkBtn" class="ui-btn" onclick="toggleDarkMode()">Modo Oscuro: OFF</button>
+    </div>
+  </div>
+</div>
+      </details>
+
+      <details open>
+        <summary id="summaryModes" title="Abrir o cerrar esta sección">Modes and answers</summary>
+        <div class="accordionBody">
+          <div class="label" id="labelModes">Active modes</div>
+          <div class="modeGroups" id="modeChecks">
+
+            <div class="modeGroup">
+              <div class="modeGroupHeader">
+                <div class="modeGroupTitle" data-ui-text="groupMeaning">Practice meaning</div>
+                <div class="modeGroupActions">
+                  <button type="button" class="secondary" onclick="toggleModeGroup('meaning', true)" data-ui-text="selectAll">Select all</button>
+                  <button type="button" class="secondary" onclick="toggleModeGroup('meaning', false)" data-ui-text="clearGroup">Clear</button>
+                </div>
+              </div>
+              <div class="checks">
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="meaning" value="en_to_es" checked> <span data-mode-label="en_to_es">English to Spanish</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="meaning" value="es_to_en" checked> <span data-mode-label="es_to_en">Spanish to English</span></label>
+              </div>
+            </div>
+
+            <div class="modeGroup">
+              <div class="modeGroupHeader">
+                <div class="modeGroupTitle" data-ui-text="groupInfinitive">Practice infinitive</div>
+                <div class="modeGroupActions">
+                  <button type="button" class="secondary" onclick="toggleModeGroup('infinitive', true)" data-ui-text="selectAll">Select all</button>
+                  <button type="button" class="secondary" onclick="toggleModeGroup('infinitive', false)" data-ui-text="clearGroup">Clear</button>
+                </div>
+              </div>
+              <div class="checks">
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="past_to_inf" checked> <span data-mode-label="past_to_inf">Past to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="part_to_inf" checked> <span data-mode-label="part_to_inf">Participle to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="ger_to_inf" checked> <span data-mode-label="ger_to_inf">Gerund to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="pron_inf_to_inf"> <span data-mode-label="pron_inf_to_inf">Pronunciation infinitive to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="pron_past_to_inf"> <span data-mode-label="pron_past_to_inf">Pronunciation past to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="pron_part_to_inf"> <span data-mode-label="pron_part_to_inf">Pronunciation participle to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="pron_ger_to_inf"> <span data-mode-label="pron_ger_to_inf">Pronunciation gerund to infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="audio_inf_to_inf"> <span data-mode-label="audio_inf_to_inf">Listen infinitive and choose infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="audio_past_to_inf"> <span data-mode-label="audio_past_to_inf">Listen past and choose infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="audio_part_to_inf"> <span data-mode-label="audio_part_to_inf">Listen participle and choose infinitive</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="infinitive" value="audio_ger_to_inf"> <span data-mode-label="audio_ger_to_inf">Listen gerund and choose infinitive</span></label>
+              </div>
+            </div>
+
+            <div class="modeGroup">
+              <div class="modeGroupHeader">
+                <div class="modeGroupTitle" data-ui-text="groupPast">Practice past</div>
+                <div class="modeGroupActions">
+                  <button type="button" class="secondary" onclick="toggleModeGroup('past', true)" data-ui-text="selectAll">Select all</button>
+                  <button type="button" class="secondary" onclick="toggleModeGroup('past', false)" data-ui-text="clearGroup">Clear</button>
+                </div>
+              </div>
+              <div class="checks">
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="inf_to_past" checked> <span data-mode-label="inf_to_past">Infinitive to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="part_to_past" checked> <span data-mode-label="part_to_past">Participle to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="ger_to_past" checked> <span data-mode-label="ger_to_past">Gerund to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="pron_inf_to_past"> <span data-mode-label="pron_inf_to_past">Pronunciation infinitive to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="pron_past_to_past"> <span data-mode-label="pron_past_to_past">Pronunciation past to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="pron_part_to_past"> <span data-mode-label="pron_part_to_past">Pronunciation participle to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="pron_ger_to_past"> <span data-mode-label="pron_ger_to_past">Pronunciation gerund to past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="audio_inf_to_past"> <span data-mode-label="audio_inf_to_past">Listen infinitive and choose past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="audio_past_to_past"> <span data-mode-label="audio_past_to_past">Listen past and choose past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="audio_part_to_past"> <span data-mode-label="audio_part_to_past">Listen participle and choose past</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="past" value="audio_ger_to_past"> <span data-mode-label="audio_ger_to_past">Listen gerund and choose past</span></label>
+              </div>
+            </div>
+
+            <div class="modeGroup">
+              <div class="modeGroupHeader">
+                <div class="modeGroupTitle" data-ui-text="groupParticiple">Practice participle</div>
+                <div class="modeGroupActions">
+                  <button type="button" class="secondary" onclick="toggleModeGroup('participle', true)" data-ui-text="selectAll">Select all</button>
+                  <button type="button" class="secondary" onclick="toggleModeGroup('participle', false)" data-ui-text="clearGroup">Clear</button>
+                </div>
+              </div>
+              <div class="checks">
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="inf_to_part" checked> <span data-mode-label="inf_to_part">Infinitive to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="past_to_part" checked> <span data-mode-label="past_to_part">Past to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="ger_to_part" checked> <span data-mode-label="ger_to_part">Gerund to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="pron_inf_to_part"> <span data-mode-label="pron_inf_to_part">Pronunciation infinitive to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="pron_past_to_part"> <span data-mode-label="pron_past_to_part">Pronunciation past to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="pron_part_to_part"> <span data-mode-label="pron_part_to_part">Pronunciation participle to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="pron_ger_to_part"> <span data-mode-label="pron_ger_to_part">Pronunciation gerund to participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="audio_inf_to_part"> <span data-mode-label="audio_inf_to_part">Listen infinitive and choose participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="audio_past_to_part"> <span data-mode-label="audio_past_to_part">Listen past and choose participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="audio_part_to_part"> <span data-mode-label="audio_part_to_part">Listen participle and choose participle</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="participle" value="audio_ger_to_part"> <span data-mode-label="audio_ger_to_part">Listen gerund and choose participle</span></label>
+              </div>
+            </div>
+
+            <div class="modeGroup">
+              <div class="modeGroupHeader">
+                <div class="modeGroupTitle" data-ui-text="groupGerund">Practice gerund</div>
+                <div class="modeGroupActions">
+                  <button type="button" class="secondary" onclick="toggleModeGroup('gerund', true)" data-ui-text="selectAll">Select all</button>
+                  <button type="button" class="secondary" onclick="toggleModeGroup('gerund', false)" data-ui-text="clearGroup">Clear</button>
+                </div>
+              </div>
+              <div class="checks">
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="inf_to_ger" checked> <span data-mode-label="inf_to_ger">Infinitive to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="past_to_ger" checked> <span data-mode-label="past_to_ger">Past to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="part_to_ger" checked> <span data-mode-label="part_to_ger">Participle to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="pron_inf_to_ger"> <span data-mode-label="pron_inf_to_ger">Pronunciation infinitive to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="pron_past_to_ger"> <span data-mode-label="pron_past_to_ger">Pronunciation past to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="pron_part_to_ger"> <span data-mode-label="pron_part_to_ger">Pronunciation participle to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="pron_ger_to_ger"> <span data-mode-label="pron_ger_to_ger">Pronunciation gerund to gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="audio_inf_to_ger"> <span data-mode-label="audio_inf_to_ger">Listen infinitive and choose gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="audio_past_to_ger"> <span data-mode-label="audio_past_to_ger">Listen past and choose gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="audio_part_to_ger"> <span data-mode-label="audio_part_to_ger">Listen participle and choose gerund</span></label>
+                <label class="check"><input type="checkbox" class="modeCheck" data-mode-group="gerund" value="audio_ger_to_ger"> <span data-mode-label="audio_ger_to_ger">Listen gerund and choose gerund</span></label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="compactGrid" style="margin-top:14px;">
+            <div>
+              <div class="label" id="labelAnswerType">Answer type</div>
+              <select id="answerModeSelect">
+                <option value="mixed">Mixed</option>
+                <option value="options">Options</option>
+                <option value="write">Write</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" id="labelVoice">Voice</div>
+              <select id="voiceSelect"></select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary id="summaryFilters" title="Abrir o cerrar esta sección">Filters and amount</summary>
+        <div class="accordionBody">
+          <div class="compactGrid">
+            <div>
+              <div class="label" id="labelFilter">Filter</div>
+              <select id="filterSelect">
+                <option value="all">All</option>
+                <option value="regular">Regular only</option>
+                <option value="irregular">Irregular only</option>
+                <option value="mastered">Mastered only</option>
+                <option value="unmastered">Pending only</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" id="labelVerbCount">Number of verbs</div>
+              <select id="verbCountSelect">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+                <option value="9999" selected>All loaded</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" id="labelQuestionCount">Number of questions</div>
+              <select id="questionCountSelect">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="9999">Unlimited</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" id="labelTimer">Timer</div>
+              <select id="timerSelect">
+                <option value="0" selected>No timer</option>
+                <option value="10">10 seconds</option>
+                <option value="15">15 seconds</option>
+                <option value="20">20 seconds</option>
+                <option value="30">30 seconds</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary id="summaryPron" title="Abrir o cerrar esta sección">Pronunciation and options</summary>
+        <div class="accordionBody">
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="showIPA" checked> <span id="showIPAText">Show IPA</span></label>
+            <label class="check"><input type="checkbox" id="showApprox" checked> <span id="showApproxText">Show approximate pronunciation</span></label>
+            <label class="check"><input type="checkbox" id="autoSpeak"> <span id="autoSpeakText">Auto pronounce</span></label>
+            <label class="check"><input type="checkbox" id="reviewWrong" checked> <span id="reviewWrongText">Review mistakes at the end</span></label>
+            <label class="check"><input type="checkbox" id="saveProgress" checked> <span id="saveProgressText">Save local progress</span></label>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary id="summaryProgress" title="Abrir o cerrar esta sección">Verb progress</summary>
+        <div class="accordionBody">
+          <div class="inline">
+            <div class="stat"><small id="masteryCountLabel">Mastered verbs</small><span id="masteryCount">0 / 0</span></div>
+            <div class="stat"><small id="masteryPercentLabel">Mastery percentage</small><span id="masteryPercent">0%</span></div>
+          </div>
+          <div style="margin-top:14px;">
+            <div class="label" id="labelMasteryProgress">Overall verb progress</div>
+            <div class="progressOuter"><div class="progressInner" id="masteryBar"></div></div>
+          </div>
+          <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:14px;" id="masteryListsWrap">
+            <div><div class="label" id="labelMastered">Mastered verbs</div><div class="miniList" id="masteredList"></div></div>
+            <div><div class="label" id="labelUnmastered">Remaining verbs</div><div class="miniList" id="unmasteredList"></div></div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary id="summaryHistory" title="Abrir o cerrar esta sección">Recent history</summary>
+        <div class="accordionBody"><ol id="historyList" class="history"></ol></div>
+      </details>
+    </div>
+
+    <div class="topActions">
+      <button id="startBtn" onclick="startGame()">Start</button>
+      <button class="secondary" id="resetSessionBtn" onclick="resetStats()">Reset session</button>
+      <button class="secondary" id="resetMasteryBtn" onclick="resetMastery()">Reset verb progress</button>
+    </div>
+
+    <div class="card">
+      <div class="meta">
+        <span class="tag" id="modeTag">Current mode: --</span>
+        <span class="tag" id="answerTag">Answer: --</span>
+        <span class="tag"><span id="timeLabelInline">Time</span>: <span id="timerText">No timer</span></span>
+      </div>
+
+      <div class="prompt" id="promptText"></div>
+      <div class="question" id="questionText">Press Start.</div>
+      <div class="translation" id="translationText"></div>
+      <div class="pron" id="ipaText"></div>
+      <div class="pron" id="approxText"></div>
+      <div class="small" id="extraInfo"></div>
+      <div class="small timer" id="countdownText"></div>
+
+      <div id="optionsArea" class="answers"></div>
+
+      <div id="writeArea" style="display:none; margin-top:12px;">
+        <input type="text" id="writeInput" placeholder="Type your answer here" autocomplete="off" />
+        <div id="writeResultBox" class="write-result-box" aria-live="polite"></div>
+        <div class="inline" style="margin-top:10px;">
+          <button onclick="submitWrittenAnswer()" id="submitBtn">Submit</button>
+        </div>
+      </div>
+
+      <div class="questionActions">
+        <button class="secondary" onclick="speakCurrent()" id="pronounceBtn">Pronounce</button>
+        <button id="nextBtn" onclick="nextQuestion()" style="display:none;">Next</button>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+      <div id="formsPronBlock" class="formsBlock"></div>
+
+      <details class="ipaLegend" id="ipaLegend"></details>
+        
+    </div>
+
+    <div class="footer" id="footerText">Progress is saved locally.</div>
+  </div>
+
+  <script>
+  
+  // Cargar el idioma guardado al iniciar la aplicación
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLang = localStorage.getItem('language');
+  if (savedLang) {
+    currentLang = savedLang;
+    const btn = document.getElementById('toggleLangBtn');
+    if (btn) {
+      btn.textContent = currentLang === 'es' ? 'Cambiar a Ingles' : 'Switch to Spanish';
+    }
+    applyUILanguage(currentLang);
+  }
+});
+
+// Asignar IDs automáticos y cargar el estado guardado al abrir la página
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('details').forEach((details, index) => {
+    // Si no tiene ID, le creamos uno automático basado en su posición
+    if (!details.id) {
+      details.id = 'auto_accordion_' + index;
+    }
+    
+    // Restaurar si estaba abierto o cerrado desde la caché
+    const savedState = localStorage.getItem('accordion_' + details.id);
+    if (savedState === 'true') {
+      details.open = true;
+    } else if (savedState === 'false') {
+      details.open = false;
+    }
+  });
+});
+
+// Guardar el estado automáticamente cuando el usuario abra o cierre cualquiera
+document.addEventListener('toggle', (event) => {
+  const target = event.target;
+  if (target.tagName === 'DETAILS') {
+    // Si por alguna razón el toggle ocurre antes del DOMContentLoaded, aseguramos su ID
+    if (!target.id) {
+      const allDetails = Array.from(document.querySelectorAll('details'));
+      target.id = 'auto_accordion_' + allDetails.indexOf(target);
+    }
+    localStorage.setItem('accordion_' + target.id, target.open);
+  }
+}, true);
+  
+    const verbData = [
+      ["be", "was/were", "been", "ser / estar"],
+      ["have", "had", "had", "tener"],
+      ["do", "did", "done", "hacer"],
+      ["go", "went", "gone", "ir"],
+      ["come", "came", "come", "venir"],
+      ["get", "got", "got/gotten", "obtener / conseguir / llegar"],
+      ["make", "made", "made", "hacer / crear"],
+      ["take", "took", "taken", "tomar / llevar"],
+      ["see", "saw", "seen", "ver"],
+      ["know", "knew", "known", "saber / conocer"],
+      ["give", "gave", "given", "dar"],
+      ["find", "found", "found", "encontrar"],
+      ["tell", "told", "told", "decir / contar"],
+      ["think", "thought", "thought", "pensar / creer"],
+      ["become", "became", "become", "convertirse en / llegar a ser"],
+      ["speak", "spoke", "spoken", "hablar"],
+      ["eat", "ate", "eaten", "comer"],
+      ["drink", "drank", "drunk", "beber"],
+      ["write", "wrote", "written", "escribir"],
+      ["read", "read", "read", "leer"],
+      ["work", "worked", "worked", "trabajar"],
+      ["play", "played", "played", "jugar / tocar"],
+      ["study", "studied", "studied", "estudiar"],
+      ["live", "lived", "lived", "vivir"],
+      ["open", "opened", "opened", "abrir"],
+      ["close", "closed", "closed", "cerrar"],
+      ["call", "called", "called", "llamar"],
+      ["help", "helped", "helped", "ayudar"],
+      ["use", "used", "used", "usar"],
+      ["watch", "watched", "watched", "mirar / ver"],
+      ["send", "sent", "sent", "enviar"],
+      ["sell", "sold", "sold", "vender"],
+      ["buy", "bought", "bought", "comprar"],
+      ["pay", "paid", "paid", "pagar"],
+      ["win", "won", "won", "ganar"],
+      ["lose", "lost", "lost", "perder"],
+      ["run", "ran", "run", "correr"],
+      ["drive", "drove", "driven", "conducir / manejar"],
+      ["walk", "walked", "walked", "caminar"],
+      ["sleep", "slept", "slept", "dormir"],
+      ["listen", "listened", "listened", "escuchar"],
+      ["learn", "learned", "learned", "aprender"],
+      ["teach", "taught", "taught", "enseñar"],
+      ["understand", "understood", "understood", "entender"],
+      ["forget", "forgot", "forgotten", "olvidar"],
+      ["remember", "remembered", "remembered", "recordar"],
+      ["bring", "brought", "brought", "traer"],
+      ["leave", "left", "left", "dejar / irse / salir"],
+      ["begin", "began", "begun", "empezar / comenzar"],
+      ["finish", "finished", "finished", "terminar"],
+      ["hug", "hugged", "hugged", "abrazar"],
+      ["kiss", "kissed", "kissed", "besar"],
+      ["laugh", "laughed", "laughed", "reír"],
+      ["cry", "cried", "cried", "llorar"],
+      ["grow", "grew", "grown", "crecer"],
+      ["cut", "cut", "cut", "cortar"],
+      ["show", "showed", "shown", "mostrar"],
+      ["hold", "held", "held", "sostener / sujetar"],
+      ["choose", "chose", "chosen", "elegir"],
+      ["change", "changed", "changed", "cambiar"],
+      ["enter", "entered", "entered", "entrar"],
+      ["jump", "jumped", "jumped", "saltar"],
+      ["clean", "cleaned", "cleaned", "limpiar"],
+      ["wash", "washed", "washed", "lavar"],
+      ["cook", "cooked", "cooked", "cocinar"],
+      ["dance", "danced", "danced", "bailar"],
+      ["sing", "sang", "sung", "cantar"],
+      ["swim", "swam", "swum", "nadar"],
+      ["borrow", "borrowed", "borrowed", "pedir prestado"],
+      ["lend", "lent", "lent", "prestar"],
+      ["break", "broke", "broken", "romper"],
+      ["fix", "fixed", "fixed", "arreglar"],
+      ["fall", "fell", "fallen", "caer"],
+      ["rise", "rose", "risen", "subir / levantarse"],
+      ["throw", "threw", "thrown", "lanzar / tirar"],
+      ["catch", "caught", "caught", "atrapar"],
+      ["meet", "met", "met", "conocer / reunirse con"],
+      ["wait", "waited", "waited", "esperar"],
+      ["need", "needed", "needed", "necesitar"],
+      ["hope", "hoped", "hoped", "esperar / tener esperanza"],
+      ["build", "built", "built", "construir"],
+      ["destroy", "destroyed", "destroyed", "destruir"],
+      ["create", "created", "created", "crear"],
+      ["decide", "decided", "decided", "decidir"],
+      ["accept", "accepted", "accepted", "aceptar"],
+      ["reject", "rejected", "rejected", "rechazar"],
+      ["improve", "improved", "improved", "mejorar"],
+      ["explain", "explained", "explained", "explicar"],
+      ["answer", "answered", "answered", "responder / contestar"],
+      ["ask", "asked", "asked", "preguntar / pedir"],
+      ["turn on", "turned on", "turned on", "encender"],
+      ["turn off", "turned off", "turned off", "apagar"],
+      ["start", "started", "started", "empezar / arrancar"],
+      ["stop", "stopped", "stopped", "parar / detener"],
+      ["move", "moved", "moved", "mover(se)"],
+      ["travel", "traveled", "traveled", "viajar"],
+      ["visit", "visited", "visited", "visitar"],
+      ["stay", "stayed", "stayed", "quedarse / permanecer"],
+      ["return", "returned", "returned", "regresar / devolver"],
+      ["miss", "missed", "missed", "extrañar / perder"],
+      ["arrive", "arrived", "arrived", "llegar"],
+      ["believe", "believed", "believed", "creer"],
+      ["carry", "carried", "carried", "llevar / cargar"],
+      ["check", "checked", "checked", "revisar / comprobar"],
+      ["collect", "collected", "collected", "recoger / coleccionar"],
+      ["compare", "compared", "compared", "comparar"],
+      ["continue", "continued", "continued", "continuar"],
+      ["control", "controlled", "controlled", "controlar"],
+      ["copy", "copied", "copied", "copiar"],
+      ["count", "counted", "counted", "contar"],
+      ["cover", "covered", "covered", "cubrir"],
+      ["deliver", "delivered", "delivered", "entregar"],
+      ["develop", "developed", "developed", "desarrollar"],
+      ["discuss", "discussed", "discussed", "discutir / conversar"],
+      ["discover", "discovered", "discovered", "descubrir"],
+      ["draw", "drew", "drawn", "dibujar"],
+      ["dream", "dreamed", "dreamed", "soñar"],
+      ["earn", "earned", "earned", "ganar / obtener"],
+      ["enjoy", "enjoyed", "enjoyed", "disfrutar"],
+      ["feel", "felt", "felt", "sentir"],
+      ["fill", "filled", "filled", "llenar"],
+      ["follow", "followed", "followed", "seguir"],
+      ["force", "forced", "forced", "forzar"],
+      ["guess", "guessed", "guessed", "adivinar"],
+      ["happen", "happened", "happened", "pasar / suceder"],
+      ["hear", "heard", "heard", "oír"],
+      ["hide", "hid", "hidden", "esconder"],
+      ["hit", "hit", "hit", "golpear"],
+      ["hurt", "hurt", "hurt", "herir / doler"],
+      ["include", "included", "included", "incluir"],
+      ["join", "joined", "joined", "unirse"],
+      ["keep", "kept", "kept", "mantener / guardar"],
+      ["let", "let", "let", "dejar / permitir"],
+      ["lie", "lay", "lain", "yacer / estar acostado"],
+      ["love", "loved", "loved", "amar / encantar"],
+      ["mean", "meant", "meant", "significar / querer decir"],
+      ["offer", "offered", "offered", "ofrecer"],
+      ["order", "ordered", "ordered", "ordenar / pedir"],
+      ["pick", "picked", "picked", "escoger / recoger"],
+      ["place", "placed", "placed", "colocar"],
+      ["plan", "planned", "planned", "planear"],
+      ["prepare", "prepared", "prepared", "preparar"],
+      ["produce", "produced", "produced", "producir"],
+      ["pull", "pulled", "pulled", "jalar / tirar"],
+      ["push", "pushed", "pushed", "empujar"],
+      ["put", "put", "put", "poner"],
+      ["reach", "reached", "reached", "alcanzar / llegar"],
+      ["receive", "received", "received", "recibir"],
+      ["repeat", "repeated", "repeated", "repetir"],
+      ["report", "reported", "reported", "reportar / informar"],
+      ["save", "saved", "saved", "guardar / ahorrar / salvar"],
+      ["search", "searched", "searched", "buscar"],
+      ["serve", "served", "served", "servir"],
+      ["set", "set", "set", "poner / establecer"],
+      ["shake", "shook", "shaken", "agitar / sacudir"],
+      ["share", "shared", "shared", "compartir"],
+      ["shoot", "shot", "shot", "disparar"],
+      ["shut", "shut", "shut", "cerrar"],
+      ["sit", "sat", "sat", "sentarse"],
+      ["smile", "smiled", "smiled", "sonreír"],
+      ["spend", "spent", "spent", "gastar / pasar tiempo"],
+      ["stand", "stood", "stood", "estar de pie"],
+      ["steal", "stole", "stolen", "robar"],
+      ["stick", "stuck", "stuck", "pegar / atascar"],
+      ["strike", "struck", "struck", "golpear"],
+      ["succeed", "succeeded", "succeeded", "tener éxito"],
+      ["suffer", "suffered", "suffered", "sufrir"],
+      ["support", "supported", "supported", "apoyar"],
+      ["survive", "survived", "survived", "sobrevivir"],
+      ["touch", "touched", "touched", "tocar"],
+      ["train", "trained", "trained", "entrenar / capacitar"],
+      ["trust", "trusted", "trusted", "confiar"],
+      ["try", "tried", "tried", "intentar"],
+      ["wear", "wore", "worn", "llevar puesto / usar"],
+      ["weigh", "weighed", "weighed", "pesar"],
+      ["wish", "wished", "wished", "desear"],
+      ["worry", "worried", "worried", "preocuparse"],
+      ["yell", "yelled", "yelled", "gritar"],
+      ["admit", "admitted", "admitted", "admitir"],
+      ["advise", "advised", "advised", "aconsejar"],
+      ["agree", "agreed", "agreed", "estar de acuerdo"],
+      ["allow", "allowed", "allowed", "permitir"],
+      ["appear", "appeared", "appeared", "aparecer"],
+      ["apply", "applied", "applied", "aplicar / solicitar"],
+      ["argue", "argued", "argued", "discutir"],
+      ["avoid", "avoided", "avoided", "evitar"],
+      ["beat", "beat", "beaten", "vencer / golpear"],
+      ["blow", "blew", "blown", "soplar"],
+      ["care", "cared", "cared", "importar / cuidar"],
+      ["climb", "climbed", "climbed", "escalar / subir"],
+      ["complain", "complained", "complained", "quejarse"],
+      ["confirm", "confirmed", "confirmed", "confirmar"],
+      ["connect", "connected", "connected", "conectar"],
+      ["consider", "considered", "considered", "considerar"],
+      ["contain", "contained", "contained", "contener"],
+      ["convince", "convinced", "convinced", "convencer"],
+      ["crash", "crashed", "crashed", "chocar"],
+      ["cross", "crossed", "crossed", "cruzar"],
+      ["deal", "dealt", "dealt", "tratar / manejar"],
+      ["demand", "demanded", "demanded", "exigir"],
+      ["depend", "depended", "depended", "depender"],
+      ["drop", "dropped", "dropped", "dejar caer"],
+      ["encourage", "encouraged", "encouraged", "animar"],
+      ["fail", "failed", "failed", "fallar / fracasar"],
+      ["fit", "fit", "fit", "quedar bien / ajustar"],
+      ["fly", "flew", "flown", "volar"],
+      ["gather", "gathered", "gathered", "reunir / juntar"],
+      ["hate", "hated", "hated", "odiar"],
+      ["imagine", "imagined", "imagined", "imaginar"],
+      ["invite", "invited", "invited", "invitar"],
+      ["lead", "led", "led", "liderar / guiar"],
+      ["manage", "managed", "managed", "manejar / lograr"],
+      ["marry", "married", "married", "casarse"],
+      ["notice", "noticed", "noticed", "notar"],
+      ["own", "owned", "owned", "poseer"],
+      ["pass", "passed", "passed", "pasar"],
+      ["perform", "performed", "performed", "realizar"],
+      ["press", "pressed", "pressed", "presionar"],
+      ["prevent", "prevented", "prevented", "prevenir / impedir"],
+      ["promise", "promised", "promised", "prometer"],
+      ["protect", "protected", "protected", "proteger"],
+      ["prove", "proved", "proven", "probar / demostrar"],
+      ["quit", "quit", "quit", "dejar / renunciar"],
+      ["raise", "raised", "raised", "levantar / aumentar"],
+      ["recognize", "recognized", "recognized", "reconocer"],
+      ["reduce", "reduced", "reduced", "reducir"],
+      ["refuse", "refused", "refused", "rehusarse"],
+      ["relax", "relaxed", "relaxed", "relajarse"],
+      ["release", "released", "released", "liberar"],
+      ["remain", "remained", "remained", "permanecer"],
+      ["repair", "repaired", "repaired", "reparar"],
+      ["replace", "replaced", "replaced", "reemplazar"],
+      ["require", "required", "required", "requerir"],
+      ["rest", "rested", "rested", "descansar"],
+      ["risk", "risked", "risked", "arriesgar"],
+      ["roll", "rolled", "rolled", "rodar / enrollar"],
+      ["rush", "rushed", "rushed", "apurarse"],
+      ["seem", "seemed", "seemed", "parecer"],
+      ["sign", "signed", "signed", "firmar"],
+      ["solve", "solved", "solved", "resolver"],
+      ["suppose", "supposed", "supposed", "suponer"],
+      ["taste", "tasted", "tasted", "probar / saber a"],
+      ["thank", "thanked", "thanked", "agradecer"],
+      ["throw away", "threw away", "thrown away", "botar / tirar"],
+      ["tie", "tied", "tied", "atar"],
+      ["wake", "woke", "woken", "despertar"],
+      ["warn", "warned", "warned", "advertir"],
+      ["waste", "wasted", "wasted", "desperdiciar"],
+      ["wave", "waved", "waved", "saludar con la mano"],
+      ["wonder", "wondered", "wondered", "preguntarse"],
+      ["work out", "worked out", "worked out", "hacer ejercicio / resolver"],
+      ["wrap", "wrapped", "wrapped", "envolver"],
+
+      ["say", "said", "said", "decir"],
+      ["look", "looked", "looked", "mirar"],
+      ["want", "wanted", "wanted", "querer"],
+      ["like", "liked", "liked", "gustar"],
+      ["talk", "talked", "talked", "hablar"],
+      ["turn", "turned", "turned", "girar / voltear"],
+      ["add", "added", "added", "agregar / sumar"],
+      ["die", "died", "died", "morir"],
+      ["provide", "provided", "provided", "proveer / proporcionar"],
+      ["suggest", "suggested", "suggested", "sugerir"],
+      ["remove", "removed", "removed", "quitar / remover"],
+      ["face", "faced", "faced", "enfrentar"],
+      ["record", "recorded", "recorded", "grabar / registrar"],
+      ["realize", "realized", "realized", "darse cuenta"],
+      ["describe", "described", "described", "describir"],
+      ["mention", "mentioned", "mentioned", "mencionar"],
+      ["handle", "handled", "handled", "manejar / gestionar"],
+      ["prefer", "preferred", "preferred", "preferir"],
+      ["matter", "mattered", "mattered", "importar"],
+      ["sound", "sounded", "sounded", "sonar"],
+      ["focus", "focused", "focused", "enfocar(se)"],
+      ["maintain", "maintained", "maintained", "mantener"],
+      ["test", "tested", "tested", "probar / examinar"],
+      ["note", "noted", "noted", "notar / anotar"],
+      ["clear", "cleared", "cleared", "aclarar / despejar"],
+      ["design", "designed", "designed", "diseñar"],
+      ["achieve", "achieved", "achieved", "lograr"],
+      ["identify", "identified", "identified", "identificar"],
+      ["store", "stored", "stored", "guardar / almacenar"],
+      ["state", "stated", "stated", "declarar / afirmar"],
+      ["adjust", "adjusted", "adjusted", "ajustar"],
+      ["announce", "announced", "announced", "anunciar"],
+      ["appreciate", "appreciated", "appreciated", "apreciar"],
+      ["approve", "approved", "approved", "aprobar"],
+      ["arrange", "arranged", "arranged", "organizar / arreglar"],
+      ["assume", "assumed", "assumed", "asumir"],
+      ["attend", "attended", "attended", "asistir"],
+      ["balance", "balanced", "balanced", "equilibrar / balancear"],
+      ["bend", "bent", "bent", "doblar / inclinar"],
+      ["blink", "blinked", "blinked", "parpadear"],
+      ["bump", "bumped", "bumped", "golpear / chocar levemente"],
+      ["calculate", "calculated", "calculated", "calcular"],
+      ["cancel", "canceled", "canceled", "cancelar"],
+      ["capture", "captured", "captured", "capturar"],
+      ["carve", "carved", "carved", "tallar / cortar"],
+      ["cause", "caused", "caused", "causar"],
+      ["charge", "charged", "charged", "cobrar / cargar"],
+      ["claim", "claimed", "claimed", "afirmar / reclamar"],
+      ["clap", "clapped", "clapped", "aplaudir"],
+      ["compose", "composed", "composed", "componer"],
+      ["concentrate", "concentrated", "concentrated", "concentrarse"],
+      ["concern", "concerned", "concerned", "preocupar / concernir"],
+      ["confuse", "confused", "confused", "confundir"],
+      ["conserve", "conserved", "conserved", "conservar"],
+      ["contribute", "contributed", "contributed", "contribuir"],
+      ["convert", "converted", "converted", "convertir"],
+      ["criticize", "criticized", "criticized", "criticar"],
+      ["delay", "delayed", "delayed", "retrasar"],
+      ["descend", "descended", "descended", "descender / bajar"],
+      ["devote", "devoted", "devoted", "dedicar"],
+      ["disagree", "disagreed", "disagreed", "estar en desacuerdo"],
+      ["disappear", "disappeared", "disappeared", "desaparecer"],
+      ["display", "displayed", "displayed", "mostrar / exhibir"],
+      ["disturb", "disturbed", "disturbed", "molestar / interrumpir"],
+      ["double", "doubled", "doubled", "duplicar"],
+      ["educate", "educated", "educated", "educar"],
+      ["eliminate", "eliminated", "eliminated", "eliminar"],
+      ["enable", "enabled", "enabled", "permitir / habilitar"],
+      ["estimate", "estimated", "estimated", "estimar"],
+      ["exchange", "exchanged", "exchanged", "intercambiar"],
+      ["excite", "excited", "excited", "emocionar"],
+      ["excuse", "excused", "excused", "disculpar"],
+      ["explode", "exploded", "exploded", "explotar"],
+      ["extend", "extended", "extended", "extender"],
+      ["fade", "faded", "faded", "desvanecerse"],
+      ["flow", "flowed", "flowed", "fluir"],
+      ["function", "functioned", "functioned", "funcionar"],
+      ["graduate", "graduated", "graduated", "graduarse"],
+      ["heat", "heated", "heated", "calentar"],
+      ["hesitate", "hesitated", "hesitated", "dudar / vacilar"]
+    ];
+
+    const verbDataNoDup = verbData
+      .reduce((acc, row) => {
+        const key = row[0].toLowerCase().trim();
+        if (!acc.some(r => r[0].toLowerCase().trim() === key)) {
+          acc.push(row);
+        }
+        return acc;
+      }, [])
+      .sort((a, b) => a[0].localeCompare(b[0]));
+
+    const UI = {
+      en: {
+        titleDefault:'Verb practice',
+        subtitle:'Practice verbs with combined modes, per-verb progress, and collapsible sections.',
+        summaryInterface:'Interface',
+        summaryModes:'Modes and answers',
+        summaryFilters:'Filters and amount',
+        summaryPron:'Pronunciation and options',
+        summaryProgress:'Verb progress',
+        summaryHistory:'Recent history',
+        groupMeaning:'Practice meaning',
+        groupInfinitive:'Practice infinitive',
+        groupPast:'Practice past',
+        groupParticiple:'Practice participle',
+        groupGerund:'Practice gerund',
+        selectAll:'Select all',
+        clearGroup:'Clear',
+        labelUILang:'Interface language',
+        labelModes:'Active modes',
+        labelAnswerType:'Answer type',
+        labelVoice:'Voice',
+        labelFilter:'Filter',
+        labelVerbCount:'Number of verbs',
+        labelQuestionCount:'Number of questions',
+        labelTimer:'Timer',
+        labelMasteryProgress:'Overall verb progress',
+        labelMastered:'Mastered verbs',
+        labelUnmastered:'Remaining verbs',
+        statCorrect:'Correct',
+        statWrong:'Wrong',
+        statAnswered:'Answered',
+        statAccuracy:'Accuracy',
+        statStreak:'Streak',
+        statBestStreak:'Best streak',
+        masteryCountLabel:'Mastered verbs',
+        masteryPercentLabel:'Mastery percentage',
+        showIPA:'Show IPA',
+        showApprox:'Show approximate pronunciation',
+        autoSpeak:'Auto pronounce',
+        reviewWrong:'Review mistakes at the end',
+        saveProgress:'Save local progress',
+        answerTypeMixed:'Mixed',
+        answerTypeOptions:'Options',
+        answerTypeWrite:'Write',
+        filterAll:'All',
+        filterRegular:'Regular only',
+        filterIrregular:'Irregular only',
+        filterMastered:'Mastered only',
+        filterUnmastered:'Pending only',
+        allLoaded:'All loaded',
+        noTimer:'No timer',
+        seconds:'seconds',
+        unlimited:'Unlimited',
+        currentMode:'Current mode',
+        answer:'Answer',
+        time:'Time',
+        timeRemaining:'Time remaining',
+        promptStart:'Press Start.',
+        typeHere:'Type your answer here',
+        start:'Start',
+        resetSession:'Reset session',
+        resetMastery:'Reset verb progress',
+        submit:'Submit',
+        pronounce:'Pronounce',
+        next:'Next',
+        noAnswersYet:'There are no answers yet.',
+        noMasteredYet:'You have not mastered any verbs yet.',
+        allMastered:'You have already mastered all loaded verbs.',
+        normalPractice:'Normal practice',
+        reviewErrors:'Error review',
+        regular:'Regular',
+        irregular:'Irregular',
+        loadingPron:'Loading pronunciation...',
+        notAvailable:'Not available',
+        gameFinished:'Game finished',
+        finalResult:'Final result',
+        correctWord:'Correct.',
+        incorrectWord:'Incorrect.',
+        yourAnswer:'Your answer',
+        correctAnswer:'Correct answer',
+        infinitive:'Infinitive',
+        past:'Past',
+        participle:'Participle',
+        gerund:'Gerund',
+        spanish:'Spanish',
+        ipa:'IPA',
+        approx:'Approx.',
+        footer:'Progress is saved locally.',
+        resetMasteryConfirm:'Are you sure you want to reset only the mastered-verb progress?',
+        needMode:'You must activate at least one mode.',
+        noVerbs:'There are no verbs available with this configuration.',
+        tooFew:'There are too few verbs for multiple-choice with this configuration. Change the filter or use write mode.',
+        reviewStarted:'Mistake review started.',
+        modeLabels: {
+          en_to_es:'English to Spanish',
+          es_to_en:'Spanish to English'
+        },
+        prompts: {
+          en_to_es:'What does it mean in Spanish?',
+          es_to_en:'What is the English infinitive?'
+        }
+      },
+      es: {
+        titleDefault:'Practica de verbos',
+        subtitle:'Practica verbos con modos combinados, progreso por verbo y secciones desplegables.',
+        summaryInterface:'Interfaz',
+        summaryModes:'Modos y respuestas',
+        summaryFilters:'Filtros y cantidad',
+        summaryPron:'Pronunciación y opciones',
+        summaryProgress:'Progreso de verbos',
+        summaryHistory:'Historial reciente',
+        groupMeaning:'Practicar significado',
+        groupInfinitive:'Practicar infinitivo',
+        groupPast:'Practicar pasado',
+        groupParticiple:'Practicar participio',
+        groupGerund:'Practicar gerundio',
+        selectAll:'Seleccionar todo',
+        clearGroup:'Limpiar',
+        labelUILang:'Idioma de la interfaz',
+        labelModes:'Modos activos',
+        labelAnswerType:'Tipo de respuesta',
+        labelVoice:'Voz',
+        labelFilter:'Filtro',
+        labelVerbCount:'Cantidad de verbos',
+        labelQuestionCount:'Cantidad de preguntas',
+        labelTimer:'Temporizador',
+        labelMasteryProgress:'Progreso total de verbos',
+        labelMastered:'Verbos dominados',
+        labelUnmastered:'Verbos pendientes',
+        statCorrect:'Aciertos',
+        statWrong:'Fallos',
+        statAnswered:'Respondidas',
+        statAccuracy:'Precisión',
+        statStreak:'Racha',
+        statBestStreak:'Mejor racha',
+        masteryCountLabel:'Verbos dominados',
+        masteryPercentLabel:'Porcentaje dominado',
+        showIPA:'Mostrar IPA',
+        showApprox:'Mostrar pronunciación aproximada',
+        autoSpeak:'Pronunciar automáticamente',
+        reviewWrong:'Repasar errores al final',
+        saveProgress:'Guardar progreso local',
+        answerTypeMixed:'Mixto',
+        answerTypeOptions:'Opciones',
+        answerTypeWrite:'Escribir',
+        filterAll:'Todos',
+        filterRegular:'Solo regulares',
+        filterIrregular:'Solo irregulares',
+        filterMastered:'Solo acertados al menos una vez',
+        filterUnmastered:'Solo pendientes',
+        allLoaded:'Todos los cargados',
+        noTimer:'Sin temporizador',
+        seconds:'segundos',
+        unlimited:'Sin límite',
+        currentMode:'Modo actual',
+        answer:'Respuesta',
+        time:'Tiempo',
+        timeRemaining:'Tiempo restante',
+        promptStart:'Pulsa Empezar.',
+        typeHere:'Escribe tu respuesta aquí',
+        start:'Empezar',
+        resetSession:'Reiniciar sesión',
+        resetMastery:'Reiniciar progreso',
+        submit:'Responder',
+        pronounce:'Pronunciar',
+        next:'Siguiente',
+        noAnswersYet:'Aún no hay respuestas.',
+        noMasteredYet:'Aún no has dominado verbos.',
+        allMastered:'Ya dominaste todos los verbos cargados.',
+        normalPractice:'Práctica normal',
+        reviewErrors:'Repaso de errores',
+        regular:'Regular',
+        irregular:'Irregular',
+        loadingPron:'Cargando pronunciación...',
+        notAvailable:'No disponible',
+        gameFinished:'Juego terminado',
+        finalResult:'Resultado final',
+        correctWord:'Correcto.',
+        incorrectWord:'Incorrecto.',
+        yourAnswer:'Tu respuesta',
+        correctAnswer:'Respuesta correcta',
+        infinitive:'Infinitivo',
+        past:'Pasado',
+        participle:'Participio',
+        gerund:'Gerundio',
+        spanish:'Español',
+        ipa:'IPA',
+        approx:'Aprox.',
+        footer:'El progreso se guarda localmente.',
+        resetMasteryConfirm:'¿Seguro que quieres reiniciar solo el progreso de verbos dominados?',
+        needMode:'Debes activar al menos un modo.',
+        noVerbs:'Con esa configuración no hay verbos disponibles.',
+        tooFew:'Con esa configuración hay muy pocos verbos para opciones múltiples. Cambia el filtro o usa modo escribir.',
+        reviewStarted:'Empezó el repaso de errores.',
+        modeLabels: {
+          en_to_es:'inglés a español',
+          es_to_en:'español a inglés'
+        },
+        prompts: {
+          en_to_es:'¿Qué significa en español?',
+          es_to_en:'¿Cuál es el infinitivo en inglés?'
+        }
+      }
+    };
+
+
+
+    const manualPron = {
+  'be':'/biː/',
+  'was':'/wʌz/',
+  'were':'/wɜːr/',
+  'been':'/bɪn/',
+  'read_present':'/riːd/',
+  'read_past':'/rɛd/',
+  'read_part':'/rɛd/',
+  'eat':'/iːt/',
+  'eating':'/ˈiːtɪŋ/',
+  'turn on':'/tɜːrn ɑːn/',
+  'turned on':'/tɜːrnd ɑːn/',
+  'turn off':'/tɜːrn ɔːf/',
+  'turned off':'/tɜːrnd ɔːf/',
+  'throw away':'/θroʊ əˈweɪ/',
+  'threw away':'/θruː əˈweɪ/',
+  'thrown away':'/θroʊn əˈweɪ/',
+  'work out':'/wɜːrk aʊt/',
+  'worked out':'/wɜːrkt aʊt/',
+  'reading':'/ˈriːdɪŋ/',
+  'working out':'/wɜːrkɪŋ aʊt/',
+  'turning on':'/tɜːrnɪŋ ɑːn/',
+  'turning off':'/tɜːrnɪŋ ɔːf/',
+  'throwing away':'/θroʊɪŋ əˈweɪ/',
+  'beginning':'/bɪˈɡɪnɪŋ/',
+  'lying':'/ˈlaɪɪŋ/',
+  'dying':'/ˈdaɪɪŋ/',
+  'tying':'/ˈtaɪɪŋ/',
+  'manage':'/ˈmænɪdʒ/',
+  'managed':'/ˈmænɪdʒd/',
+  'managing':'/ˈmænɪdʒɪŋ/',
+  'got':'/ɡɑːt/',
+  'gotten':'/ˈɡɑːtən/'
+
+};
+
+
+const offlinePronDB = {"accept":{"ipa":"/æksept/","approx":"aksept"},"accepted":{"ipa":"/ækseptɪd/","approx":"akseptid"},"accepting":{"ipa":"/ækseptɪŋ/","approx":"aksepting"},"achieve":{"ipa":"/ʌtʃiːv/","approx":"achiiv"},"achieved":{"ipa":"/ʌtʃiːvd/","approx":"achiivd"},"achieving":{"ipa":"/ʌtʃiːvɪŋ/","approx":"achiiving"},"add":{"ipa":"/æd/","approx":"ad"},"added":{"ipa":"/ædʌd/","approx":"adad"},"adding":{"ipa":"/ædɪŋ/","approx":"ading"},"adjust":{"ipa":"/ʌdʒʌst/","approx":"ayast"},"adjusted":{"ipa":"/ʌdʒʌstɪd/","approx":"ayastid"},"adjusting":{"ipa":"/ʌdʒʌstɪŋ/","approx":"ayasting"},"admit":{"ipa":"/ʌdmɪt/","approx":"admit"},"admitted":{"ipa":"/ʌdmɪtɪd/","approx":"admirid"},"admitting":{"ipa":"/ædmɪtɪŋ/","approx":"admiring"},"advise":{"ipa":"/ædvaɪz/","approx":"advaiz"},"advised":{"ipa":"/ædvaɪzd/","approx":"advaizd"},"advising":{"ipa":"/ædvaɪzɪŋ/","approx":"advaizing"},"agree":{"ipa":"/ʌɡriː/","approx":"agrii"},"agreed":{"ipa":"/ʌɡriːd/","approx":"agriid"},"agreeing":{"ipa":"/ʌɡriːɪŋ/","approx":"agriing"},"allow":{"ipa":"/ʌlaʊ/","approx":"alau"},"allowed":{"ipa":"/ʌlaʊd/","approx":"alaud"},"allowing":{"ipa":"/ʌlaʊɪŋ/","approx":"alauing"},"announce":{"ipa":"/ʌnaʊns/","approx":"anauns"},"announced":{"ipa":"/ʌnaʊnst/","approx":"anaunst"},"announcing":{"ipa":"/ʌnaʊnsɪŋ/","approx":"anaunsing"},"answer":{"ipa":"/ænsɜːr/","approx":"anser"},"answered":{"ipa":"/ænsɜːrd/","approx":"anserd"},"answering":{"ipa":"/ænsɜːrɪŋ/","approx":"ansering"},"appear":{"ipa":"/ʌpɪr/","approx":"apir"},"appeared":{"ipa":"/ʌpɪrd/","approx":"apird"},"appearing":{"ipa":"/ʌpɪrɪŋ/","approx":"apiring"},"applied":{"ipa":"/ʌplaɪd/","approx":"aplaid"},"apply":{"ipa":"/ʌplaɪ/","approx":"aplai"},"applying":{"ipa":"/ʌplaɪɪŋ/","approx":"aplaiing"},"appreciate":{"ipa":"/ʌpriːʃiːeɪt/","approx":"apriishiieit"},"appreciated":{"ipa":"/ʌpriːʃiːeɪtɪd/","approx":"apriishiieirid"},"appreciating":{"ipa":"/ʌpriːʃiːeɪtɪŋ/","approx":"apriishiieiring"},"approve":{"ipa":"/ʌpruːv/","approx":"apruuv"},"approved":{"ipa":"/ʌpruːvd/","approx":"apruuvd"},"approving":{"ipa":"/ʌpruːvɪŋ/","approx":"apruuving"},"argue":{"ipa":"/ɑːrɡjuː/","approx":"aargyuu"},"argued":{"ipa":"/ɑːrɡjuːd/","approx":"aargyuud"},"arguing":{"ipa":"/ɑːrɡjuːɪŋ/","approx":"aargyuuing"},"arrange":{"ipa":"/ɜːreɪndʒ/","approx":"ereinch"},"arranged":{"ipa":"/ɜːreɪndʒd/","approx":"ereinchd"},"arranging":{"ipa":"/ɜːreɪndʒɪŋ/","approx":"ereinying"},"arrive":{"ipa":"/ɜːraɪv/","approx":"eraiv"},"arrived":{"ipa":"/ɜːraɪvd/","approx":"eraivd"},"arriving":{"ipa":"/ɜːraɪvɪŋ/","approx":"eraiving"},"ask":{"ipa":"/æsk/","approx":"ask"},"asked":{"ipa":"/æskt/","approx":"askt"},"asking":{"ipa":"/æskɪŋ/","approx":"asking"},"assume":{"ipa":"/ʌsuːm/","approx":"asuum"},"assumed":{"ipa":"/ʌsuːmd/","approx":"asuumd"},"assuming":{"ipa":"/ʌsuːmɪŋ/","approx":"asuuming"},"ate":{"ipa":"/eɪt/","approx":"eit"},"attend":{"ipa":"/ʌtend/","approx":"atend"},"attended":{"ipa":"/ʌtendɪd/","approx":"atendid"},"attending":{"ipa":"/ʌtendɪŋ/","approx":"atending"},"avoid":{"ipa":"/ʌvɔɪd/","approx":"avoid"},"avoiding":{"ipa":"/ʌvɔɪdɪŋ/","approx":"avoiding"},"avoided":{"ipa":"/ʌvɔɪdɪd/","approx":"avoidid"},"balance":{"ipa":"/bælʌns/","approx":"balans"},"balanced":{"ipa":"/bælʌnst/","approx":"balanst"},"balancing":{"ipa":"/bælʌnsɪŋ/","approx":"balansing"},"be":{"ipa":"/biː/","approx":"bii"},"beat":{"ipa":"/biːt/","approx":"biit"},"beaten":{"ipa":"/biːtʌn/","approx":"biitan"},"beating":{"ipa":"/biːtɪŋ/","approx":"biiring"},"became":{"ipa":"/bɪkeɪm/","approx":"bikeim"},"become":{"ipa":"/bɪkʌm/","approx":"bikam"},"becoming":{"ipa":"/bɪkʌmɪŋ/","approx":"bikaming"},"been":{"ipa":"/bɪn/","approx":"bin"},"began":{"ipa":"/bɪɡæn/","approx":"bigan"},"begin":{"ipa":"/bɪɡɪn/","approx":"bigin"},"beginning":{"ipa":"/bɪɡɪnɪŋ/","approx":"bigining"},"begun":{"ipa":"/bɪɡʌn/","approx":"bigan"},"believe":{"ipa":"/bɪliːv/","approx":"biliiv"},"believed":{"ipa":"/bɪliːvd/","approx":"biliivd"},"believing":{"ipa":"/bɪliːvɪŋ/","approx":"biliiving"},"bend":{"ipa":"/bend/","approx":"bend"},"bending":{"ipa":"/bendɪŋ/","approx":"bending"},"bent":{"ipa":"/bent/","approx":"bent"},"bing":{"ipa":"/bɪŋ/","approx":"bing"},"blew":{"ipa":"/bluː/","approx":"bluu"},"blink":{"ipa":"/blɪŋk/","approx":"blingk"},"blinked":{"ipa":"/blɪŋkt/","approx":"blingkt"},"blinking":{"ipa":"/blɪŋkɪŋ/","approx":"blingking"},"blow":{"ipa":"/bloʊ/","approx":"blou"},"blowing":{"ipa":"/bloʊɪŋ/","approx":"blouing"},"blown":{"ipa":"/bloʊn/","approx":"bloun"},"borrow":{"ipa":"/bɑːroʊ/","approx":"baarou"},"borrowed":{"ipa":"/bɑːroʊd/","approx":"baaroud"},"borrowing":{"ipa":"/bɑːroʊɪŋ/","approx":"baarouing"},"bought":{"ipa":"/bɔːt/","approx":"bot"},"break":{"ipa":"/breɪk/","approx":"breik"},"breaking":{"ipa":"/breɪkɪŋ/","approx":"breiking"},"bring":{"ipa":"/brɪŋ/","approx":"bring"},"bringing":{"ipa":"/brɪŋɪŋ/","approx":"bringing"},"broke":{"ipa":"/broʊk/","approx":"brouk"},"broken":{"ipa":"/broʊkʌn/","approx":"broukan"},"brought":{"ipa":"/brɔːt/","approx":"brot"},"build":{"ipa":"/bɪld/","approx":"bild"},"building":{"ipa":"/bɪldɪŋ/","approx":"bilding"},"built":{"ipa":"/bɪlt/","approx":"bilt"},"bump":{"ipa":"/bʌmp/","approx":"bamp"},"bumped":{"ipa":"/bʌmpt/","approx":"bampt"},"bumping":{"ipa":"/bʌmpɪŋ/","approx":"bamping"},"buy":{"ipa":"/baɪ/","approx":"bai"},"buying":{"ipa":"/baɪɪŋ/","approx":"baiing"},"calculate":{"ipa":"/kælkjʌleɪt/","approx":"kalkyaleit"},"calculated":{"ipa":"/kælkjʌleɪtɪd/","approx":"kalkyaleirid"},"calculating":{"ipa":"/kælkjʌleɪtɪŋ/","approx":"kalkyaleiring"},"call":{"ipa":"/kɔːl/","approx":"kol"},"called":{"ipa":"/kɔːld/","approx":"kold"},"calling":{"ipa":"/kɔːlɪŋ/","approx":"koling"},"came":{"ipa":"/keɪm/","approx":"keim"},"cancel":{"ipa":"/kænsʌl/","approx":"kansal"},"canceled":{"ipa":"/kænsʌld/","approx":"kansald"},"canceling":{"ipa":"/kænsʌlɪŋ/","approx":"kansaling"},"capture":{"ipa":"/kæptʃɜːr/","approx":"kapcher"},"captured":{"ipa":"/kæptʃɜːrd/","approx":"kapcherd"},"capturing":{"ipa":"/kæptʃɜːrɪŋ/","approx":"kapchering"},"care":{"ipa":"/ker/","approx":"ker"},"cared":{"ipa":"/kerd/","approx":"kerd"},"caring":{"ipa":"/kerɪŋ/","approx":"kering"},"carried":{"ipa":"/kæriːd/","approx":"kariid"},"carry":{"ipa":"/kæriː/","approx":"karii"},"carrying":{"ipa":"/kæriːɪŋ/","approx":"kariing"},"carve":{"ipa":"/kɑːrv/","approx":"kaarv"},"carved":{"ipa":"/kɑːrvd/","approx":"kaarvd"},"carving":{"ipa":"/kɑːrvɪŋ/","approx":"kaarving"},"catch":{"ipa":"/kætʃ/","approx":"kach"},"catching":{"ipa":"/kætʃɪŋ/","approx":"kaching"},"caught":{"ipa":"/kɑːt/","approx":"kaat"},"cause":{"ipa":"/kɑːz/","approx":"kaaz"},"caused":{"ipa":"/kɑːzd/","approx":"kaazd"},"causing":{"ipa":"/kɑːzɪŋ/","approx":"kaazing"},"change":{"ipa":"/tʃeɪndʒ/","approx":"cheinch"},"changed":{"ipa":"/tʃeɪndʒd/","approx":"cheinchd"},"changing":{"ipa":"/tʃeɪndʒɪŋ/","approx":"cheinying"},"charge":{"ipa":"/tʃɑːrdʒ/","approx":"chaarch"},"charged":{"ipa":"/tʃɑːrdʒd/","approx":"chaarchd"},"charging":{"ipa":"/tʃɑːrdʒɪŋ/","approx":"chaarying"},"check":{"ipa":"/tʃek/","approx":"chek"},"checked":{"ipa":"/tʃekt/","approx":"chekt"},"checking":{"ipa":"/tʃekɪŋ/","approx":"cheking"},"choose":{"ipa":"/tʃuːz/","approx":"chuuz"},"choosing":{"ipa":"/tʃuːzɪŋ/","approx":"chuuzing"},"chose":{"ipa":"/tʃoʊz/","approx":"chouz"},"chosen":{"ipa":"/tʃoʊzʌn/","approx":"chouzan"},"claim":{"ipa":"/kleɪm/","approx":"kleim"},"claimed":{"ipa":"/kleɪmd/","approx":"kleimd"},"claiming":{"ipa":"/kleɪmɪŋ/","approx":"kleiming"},"clap":{"ipa":"/klæp/","approx":"klap"},"clapped":{"ipa":"/klæpt/","approx":"klapt"},"clapping":{"ipa":"/klæpɪŋ/","approx":"klaping"},"clean":{"ipa":"/kliːn/","approx":"kliin"},"cleaned":{"ipa":"/kliːnd/","approx":"kliind"},"cleaning":{"ipa":"/kliːnɪŋ/","approx":"kliining"},"clear":{"ipa":"/klɪr/","approx":"klir"},"cleared":{"ipa":"/klɪrd/","approx":"klird"},"clearing":{"ipa":"/klɪrɪŋ/","approx":"kliring"},"climb":{"ipa":"/klaɪm/","approx":"klaim"},"climbed":{"ipa":"/klaɪmd/","approx":"klaimd"},"climbing":{"ipa":"/klaɪmɪŋ/","approx":"klaiming"},"close":{"ipa":"/kloʊs/","approx":"klous"},"closed":{"ipa":"/kloʊzd/","approx":"klouzd"},"closing":{"ipa":"/kloʊzɪŋ/","approx":"klouzing"},"collect":{"ipa":"/kʌlekt/","approx":"kalekt"},"collected":{"ipa":"/kʌlektʌd/","approx":"kalektad"},"collecting":{"ipa":"/kʌlektɪŋ/","approx":"kalekting"},"come":{"ipa":"/kʌm/","approx":"kam"},"coming":{"ipa":"/kʌmɪŋ/","approx":"kaming"},"compare":{"ipa":"/kʌmper/","approx":"kamper"},"compared":{"ipa":"/kʌmperd/","approx":"kamperd"},"comparing":{"ipa":"/kʌmperɪŋ/","approx":"kampering"},"complain":{"ipa":"/kʌmpleɪn/","approx":"kamplein"},"complained":{"ipa":"/kʌmpleɪnd/","approx":"kampleind"},"complaining":{"ipa":"/kʌmpleɪnɪŋ/","approx":"kampleining"},"compose":{"ipa":"/kʌmpoʊz/","approx":"kampouz"},"composed":{"ipa":"/kʌmpoʊzd/","approx":"kampouzd"},"composing":{"ipa":"/kʌmpoʊzɪŋ/","approx":"kampouzing"},"concentrate":{"ipa":"/kɑːnsʌntreɪt/","approx":"kaansantreit"},"concentrated":{"ipa":"/kɑːnsʌntreɪtɪd/","approx":"kaansantreirid"},"concentrating":{"ipa":"/kɑːnsʌntreɪtɪŋ/","approx":"kaansantreiring"},"concern":{"ipa":"/kʌnsɜːrn/","approx":"kansern"},"concerned":{"ipa":"/kʌnsɜːrnd/","approx":"kansernd"},"concerning":{"ipa":"/kʌnsɜːrnɪŋ/","approx":"kanserning"},"confirm":{"ipa":"/kʌnfɜːrm/","approx":"kanferm"},"confirmed":{"ipa":"/kʌnfɜːrmd/","approx":"kanfermd"},"confirming":{"ipa":"/kʌnfɜːrmɪŋ/","approx":"kanferming"},"confuse":{"ipa":"/kʌnfjuːz/","approx":"kanfyuuz"},"confused":{"ipa":"/kʌnfjuːzd/","approx":"kanfyuuzd"},"confusing":{"ipa":"/kʌnfjuːzɪŋ/","approx":"kanfyuuzing"},"connect":{"ipa":"/kʌnekt/","approx":"kanekt"},"connected":{"ipa":"/kʌnektɪd/","approx":"kanektid"},"connecting":{"ipa":"/kʌnektɪŋ/","approx":"kanekting"},"conserve":{"ipa":"/kʌnsɜːrv/","approx":"kanserv"},"conserved":{"ipa":"/kʌnsɜːrvd/","approx":"kanservd"},"conserving":{"ipa":"/kʌnsɜːrvɪŋ/","approx":"kanserving"},"consider":{"ipa":"/kʌnsɪdɜːr/","approx":"kansider"},"considered":{"ipa":"/kʌnsɪdɜːrd/","approx":"kansiderd"},"considering":{"ipa":"/kʌnsɪdɜːrɪŋ/","approx":"kansidering"},"contain":{"ipa":"/kʌnteɪn/","approx":"kantein"},"contained":{"ipa":"/kʌnteɪnd/","approx":"kanteind"},"containing":{"ipa":"/kʌnteɪnɪŋ/","approx":"kanteining"},"continue":{"ipa":"/kʌntɪnjuː/","approx":"kantinyuu"},"continued":{"ipa":"/kʌntɪnjuːd/","approx":"kantinyuud"},"continuing":{"ipa":"/kʌntɪnjuːɪŋ/","approx":"kantinyuuing"},"contribute":{"ipa":"/kʌntrɪbjuːt/","approx":"kantribyuut"},"contributed":{"ipa":"/kʌntrɪbjuːtɪd/","approx":"kantribyuurid"},"contributing":{"ipa":"/kʌntrɪbjuːtɪŋ/","approx":"kantribyuuring"},"control":{"ipa":"/kʌntroʊl/","approx":"kantroul"},"controlling":{"ipa":"/kʌntroʊlɪŋ/","approx":"kantrouling"},"controlled":{"ipa":"/kʌntroʊld/","approx":"kantrould"},"convert":{"ipa":"/kɑːnvɜːrt/","approx":"kaanvert"},"converted":{"ipa":"/kʌnvɜːrtɪd/","approx":"kanverrid"},"converting":{"ipa":"/kʌnvɜːrtɪŋ/","approx":"kanverring"},"convince":{"ipa":"/kʌnvɪns/","approx":"kanvins"},"convinced":{"ipa":"/kʌnvɪnst/","approx":"kanvinst"},"convincing":{"ipa":"/kʌnvɪnsɪŋ/","approx":"kanvinsing"},"cook":{"ipa":"/kʊk/","approx":"kuk"},"cooked":{"ipa":"/kʊkt/","approx":"kukt"},"cooking":{"ipa":"/kʊkɪŋ/","approx":"kuking"},"copied":{"ipa":"/kɑːpiːd/","approx":"kaapiid"},"copy":{"ipa":"/kɑːpiː/","approx":"kaapii"},"copying":{"ipa":"/kɑːpiːɪŋ/","approx":"kaapiing"},"count":{"ipa":"/kaʊnt/","approx":"kaunt"},"counted":{"ipa":"/kaʊntɪd/","approx":"kauntid"},"counting":{"ipa":"/kaʊntɪŋ/","approx":"kaunting"},"cover":{"ipa":"/kʌvɜːr/","approx":"kaver"},"covered":{"ipa":"/kʌvɜːrd/","approx":"kaverd"},"covering":{"ipa":"/kʌvɜːrɪŋ/","approx":"kavering"},"crash":{"ipa":"/kræʃ/","approx":"krash"},"crashed":{"ipa":"/kræʃt/","approx":"krasht"},"crashing":{"ipa":"/kræʃɪŋ/","approx":"krashing"},"create":{"ipa":"/kriːeɪt/","approx":"kriieit"},"created":{"ipa":"/kriːeɪtʌd/","approx":"kriieirad"},"creating":{"ipa":"/kriːeɪtɪŋ/","approx":"kriieiring"},"cried":{"ipa":"/kraɪd/","approx":"kraid"},"criticize":{"ipa":"/krɪtɪsaɪz/","approx":"kririsaiz"},"criticized":{"ipa":"/krɪtʌsaɪzd/","approx":"krirasaizd"},"criticizing":{"ipa":"/krɪtɪsaɪzɪŋ/","approx":"kririsaizing"},"cross":{"ipa":"/krɔːs/","approx":"kros"},"crossed":{"ipa":"/krɔːst/","approx":"krost"},"crossing":{"ipa":"/krɔːsɪŋ/","approx":"krosing"},"cry":{"ipa":"/kraɪ/","approx":"krai"},"crying":{"ipa":"/kraɪɪŋ/","approx":"kraiing"},"cut":{"ipa":"/kʌt/","approx":"kat"},"cutting":{"ipa":"/kʌtɪŋ/","approx":"karing"},"dance":{"ipa":"/dæns/","approx":"dans"},"danced":{"ipa":"/dænst/","approx":"danst"},"dancing":{"ipa":"/dænsɪŋ/","approx":"dansing"},"deal":{"ipa":"/diːl/","approx":"diil"},"dealing":{"ipa":"/diːlɪŋ/","approx":"diiling"},"dealt":{"ipa":"/delt/","approx":"delt"},"decide":{"ipa":"/dɪsaɪd/","approx":"disaid"},"decided":{"ipa":"/dɪsaɪdɪd/","approx":"disaidid"},"deciding":{"ipa":"/dɪsaɪdɪŋ/","approx":"disaiding"},"delay":{"ipa":"/dɪleɪ/","approx":"dilei"},"delayed":{"ipa":"/dɪleɪd/","approx":"dileid"},"delaying":{"ipa":"/dɪleɪɪŋ/","approx":"dileiing"},"deliver":{"ipa":"/dɪlɪvɜːr/","approx":"diliver"},"delivered":{"ipa":"/dɪlɪvɜːrd/","approx":"diliverd"},"delivering":{"ipa":"/dɪlɪvɜːrɪŋ/","approx":"dilivering"},"demand":{"ipa":"/dɪmænd/","approx":"dimand"},"demanded":{"ipa":"/dɪmændʌd/","approx":"dimandad"},"demanding":{"ipa":"/dɪmændɪŋ/","approx":"dimanding"},"depend":{"ipa":"/dɪpend/","approx":"dipend"},"depended":{"ipa":"/dɪpendʌd/","approx":"dipendad"},"depending":{"ipa":"/dɪpendɪŋ/","approx":"dipending"},"descend":{"ipa":"/dɪsend/","approx":"disend"},"descended":{"ipa":"/dɪsendʌd/","approx":"disendad"},"descending":{"ipa":"/dɪsendɪŋ/","approx":"disending"},"describe":{"ipa":"/dɪskraɪb/","approx":"diskraib"},"described":{"ipa":"/dɪskraɪbd/","approx":"diskraibd"},"describing":{"ipa":"/dɪskraɪbɪŋ/","approx":"diskraibing"},"design":{"ipa":"/dɪzaɪn/","approx":"dizain"},"designed":{"ipa":"/dɪzaɪnd/","approx":"dizaind"},"designing":{"ipa":"/dɪzaɪnɪŋ/","approx":"dizaining"},"destroy":{"ipa":"/dɪstrɔɪ/","approx":"distroi"},"destroyed":{"ipa":"/dɪstrɔɪd/","approx":"distroid"},"destroying":{"ipa":"/dɪstrɔɪɪŋ/","approx":"distroiing"},"develop":{"ipa":"/dɪvelʌp/","approx":"divelap"},"developed":{"ipa":"/dɪvelʌpt/","approx":"divelapt"},"developing":{"ipa":"/dɪvelʌpɪŋ/","approx":"divelaping"},"devote":{"ipa":"/dɪvoʊt/","approx":"divout"},"devoted":{"ipa":"/dɪvoʊtɪd/","approx":"divourid"},"devoting":{"ipa":"/dɪvoʊtɪŋ/","approx":"divouring"},"did":{"ipa":"/dɪd/","approx":"did"},"die":{"ipa":"/daɪ/","approx":"dai"},"died":{"ipa":"/daɪd/","approx":"daid"},"disagree":{"ipa":"/dɪsʌɡriː/","approx":"disagrii"},"disagreed":{"ipa":"/dɪsʌɡriːd/","approx":"disagriid"},"disagreeing":{"ipa":"/dɪsʌɡriːɪŋ/","approx":"disagriing"},"disappear":{"ipa":"/dɪsʌpɪr/","approx":"disapir"},"disappeared":{"ipa":"/dɪsʌpɪrd/","approx":"disapird"},"disappearing":{"ipa":"/dɪsʌpɪrɪŋ/","approx":"disapiring"},"discover":{"ipa":"/dɪskʌvɜːr/","approx":"diskaver"},"discovered":{"ipa":"/dɪskʌvɜːrd/","approx":"diskaverd"},"discovering":{"ipa":"/dɪskʌvɜːrɪŋ/","approx":"diskavering"},"discuss":{"ipa":"/dɪskʌs/","approx":"diskas"},"discussed":{"ipa":"/dɪskʌst/","approx":"diskast"},"discussing":{"ipa":"/dɪskʌsɪŋ/","approx":"diskasing"},"display":{"ipa":"/dɪspleɪ/","approx":"displei"},"displayed":{"ipa":"/dɪspleɪd/","approx":"displeid"},"displaying":{"ipa":"/dɪspleɪɪŋ/","approx":"displeiing"},"disturb":{"ipa":"/dɪstɜːrb/","approx":"disterb"},"disturbed":{"ipa":"/dɪstɜːrbd/","approx":"disterbd"},"disturbing":{"ipa":"/dɪstɜːrbɪŋ/","approx":"disterbing"},"do":{"ipa":"/duː/","approx":"duu"},"doing":{"ipa":"/duːɪŋ/","approx":"duuing"},"done":{"ipa":"/dʌn/","approx":"dan"},"double":{"ipa":"/dʌbʌl/","approx":"dabal"},"doubled":{"ipa":"/dʌbʌld/","approx":"dabald"},"doubling":{"ipa":"/dʌbʌlɪŋ/","approx":"dabaling"},"drank":{"ipa":"/dræŋk/","approx":"drangk"},"draw":{"ipa":"/drɔː/","approx":"dro"},"drawing":{"ipa":"/drɔːɪŋ/","approx":"droing"},"drawn":{"ipa":"/drɔːn/","approx":"dron"},"dream":{"ipa":"/driːm/","approx":"driim"},"dreamed":{"ipa":"/driːmd/","approx":"driimd"},"dreaming":{"ipa":"/driːmɪŋ/","approx":"driiming"},"drew":{"ipa":"/druː/","approx":"druu"},"drink":{"ipa":"/drɪŋk/","approx":"dringk"},"drinking":{"ipa":"/drɪŋkɪŋ/","approx":"dringking"},"drive":{"ipa":"/draɪv/","approx":"draiv"},"driven":{"ipa":"/drɪvʌn/","approx":"drivan"},"driving":{"ipa":"/draɪvɪŋ/","approx":"draiving"},"drop":{"ipa":"/drɑːp/","approx":"draap"},"dropped":{"ipa":"/drɑːpt/","approx":"draapt"},"dropping":{"ipa":"/drɑːpɪŋ/","approx":"draaping"},"drove":{"ipa":"/droʊv/","approx":"drouv"},"drunk":{"ipa":"/drʌŋk/","approx":"drangk"},"dying":{"ipa":"/daɪɪŋ/","approx":"daiing"},"earn":{"ipa":"/ɜːrn/","approx":"ern"},"earned":{"ipa":"/ɜːrnd/","approx":"ernd"},"earning":{"ipa":"/ɜːrnɪŋ/","approx":"erning"},"eat":{"ipa":"/iːt/","approx":"iit"},"eaten":{"ipa":"/iːtʌn/","approx":"iitan"},"eating":{"ipa":"/iːtɪŋ/","approx":"iiring"},"educate":{"ipa":"/edʒʌkeɪt/","approx":"eyakeit"},"educated":{"ipa":"/edʒʌkeɪtɪd/","approx":"eyakeirid"},"educating":{"ipa":"/edʒʌkeɪtɪŋ/","approx":"eyakeiring"},"eliminate":{"ipa":"/ɪlɪmʌneɪt/","approx":"ilimaneit"},"eliminated":{"ipa":"/ɪlɪmʌneɪtɪd/","approx":"ilimaneirid"},"eliminating":{"ipa":"/ɪlɪmʌneɪtɪŋ/","approx":"ilimaneiring"},"enable":{"ipa":"/eneɪbʌl/","approx":"eneibal"},"enabled":{"ipa":"/eneɪbʌld/","approx":"eneibald"},"enabling":{"ipa":"/eneɪbʌlɪŋ/","approx":"eneibaling"},"encourage":{"ipa":"/enkɜːrɪdʒ/","approx":"enkeriy"},"encouraged":{"ipa":"/enkɜːrɪdʒd/","approx":"enkeriyd"},"encouraging":{"ipa":"/enkɜːrɪdʒɪŋ/","approx":"enkeriying"},"enjoy":{"ipa":"/endʒɔɪ/","approx":"enyoi"},"enjoyed":{"ipa":"/endʒɔɪd/","approx":"enyoid"},"enjoying":{"ipa":"/endʒɔɪɪŋ/","approx":"enyoiing"},"enter":{"ipa":"/entɜːr/","approx":"enter"},"entered":{"ipa":"/entɜːrd/","approx":"enterd"},"entering":{"ipa":"/entɜːrɪŋ/","approx":"entering"},"estimate":{"ipa":"/estʌmʌt/","approx":"estamat"},"estimated":{"ipa":"/estʌmeɪtʌd/","approx":"estameirad"},"estimating":{"ipa":"/estʌmeɪtɪŋ/","approx":"estameiring"},"exchange":{"ipa":"/ɪkstʃeɪndʒ/","approx":"ikscheinch"},"exchanged":{"ipa":"/ɪkstʃeɪndʒd/","approx":"ikscheinchd"},"exchanging":{"ipa":"/ɪkstʃeɪndʒɪŋ/","approx":"ikscheinying"},"excite":{"ipa":"/ɪksaɪt/","approx":"iksait"},"excited":{"ipa":"/ɪksaɪtʌd/","approx":"iksairad"},"exciting":{"ipa":"/ɪksaɪtɪŋ/","approx":"iksairing"},"excuse":{"ipa":"/ɪkskjuːs/","approx":"ikskyuus"},"excused":{"ipa":"/ɪkskjuːzd/","approx":"ikskyuuzd"},"excusing":{"ipa":"/ɪkskjuːzɪŋ/","approx":"ikskyuuzing"},"explain":{"ipa":"/ɪkspleɪn/","approx":"iksplein"},"explained":{"ipa":"/ɪkspleɪnd/","approx":"ikspleind"},"explaining":{"ipa":"/ɪkspleɪnɪŋ/","approx":"ikspleining"},"explode":{"ipa":"/ɪksploʊd/","approx":"iksploud"},"exploded":{"ipa":"/ɪksploʊdʌd/","approx":"iksploudad"},"exploding":{"ipa":"/ɪksploʊdɪŋ/","approx":"iksplouding"},"extend":{"ipa":"/ɪkstend/","approx":"ikstend"},"extended":{"ipa":"/ɪkstendʌd/","approx":"ikstendad"},"extending":{"ipa":"/ɪkstendɪŋ/","approx":"ikstending"},"face":{"ipa":"/feɪs/","approx":"feis"},"faced":{"ipa":"/feɪst/","approx":"feist"},"facing":{"ipa":"/feɪsɪŋ/","approx":"feising"},"fade":{"ipa":"/feɪd/","approx":"feid"},"faded":{"ipa":"/feɪdʌd/","approx":"feidad"},"fading":{"ipa":"/feɪdɪŋ/","approx":"feiding"},"fail":{"ipa":"/feɪl/","approx":"feil"},"failed":{"ipa":"/feɪld/","approx":"feild"},"failing":{"ipa":"/feɪlɪŋ/","approx":"feiling"},"fall":{"ipa":"/fɔːl/","approx":"fol"},"fallen":{"ipa":"/fɑːlʌn/","approx":"faalan"},"falling":{"ipa":"/fɑːlɪŋ/","approx":"faaling"},"feel":{"ipa":"/fiːl/","approx":"fiil"},"feeling":{"ipa":"/fiːlɪŋ/","approx":"fiiling"},"fell":{"ipa":"/fel/","approx":"fel"},"felt":{"ipa":"/felt/","approx":"felt"},"fill":{"ipa":"/fɪl/","approx":"fil"},"filled":{"ipa":"/fɪld/","approx":"fild"},"filling":{"ipa":"/fɪlɪŋ/","approx":"filing"},"find":{"ipa":"/faɪnd/","approx":"faind"},"finding":{"ipa":"/faɪndɪŋ/","approx":"fainding"},"finish":{"ipa":"/fɪnɪʃ/","approx":"finish"},"finished":{"ipa":"/fɪnɪʃt/","approx":"finisht"},"finishing":{"ipa":"/fɪnɪʃɪŋ/","approx":"finishing"},"fit":{"ipa":"/fɪt/","approx":"fit"},"fitting":{"ipa":"/fɪtɪŋ/","approx":"firing"},"fix":{"ipa":"/fɪks/","approx":"fiks"},"fixed":{"ipa":"/fɪkst/","approx":"fikst"},"fixing":{"ipa":"/fɪksɪŋ/","approx":"fiksing"},"flew":{"ipa":"/fluː/","approx":"fluu"},"flow":{"ipa":"/floʊ/","approx":"flou"},"flowed":{"ipa":"/floʊd/","approx":"floud"},"flowing":{"ipa":"/floʊɪŋ/","approx":"flouing"},"flown":{"ipa":"/floʊn/","approx":"floun"},"fly":{"ipa":"/flaɪ/","approx":"flai"},"flying":{"ipa":"/flaɪɪŋ/","approx":"flaiing"},"focus":{"ipa":"/foʊkʌs/","approx":"foukas"},"focused":{"ipa":"/foʊkʌst/","approx":"foukast"},"focusing":{"ipa":"/foʊkʌsɪŋ/","approx":"foukasing"},"follow":{"ipa":"/fɑːloʊ/","approx":"faalou"},"followed":{"ipa":"/fɑːloʊd/","approx":"faaloud"},"following":{"ipa":"/fɑːloʊɪŋ/","approx":"faalouing"},"force":{"ipa":"/fɔːrs/","approx":"fors"},"forced":{"ipa":"/fɔːrst/","approx":"forst"},"forcing":{"ipa":"/fɔːrsɪŋ/","approx":"forsing"},"forget":{"ipa":"/fɜːrɡet/","approx":"ferget"},"forgetting":{"ipa":"/fɜːrɡetɪŋ/","approx":"fergering"},"forgot":{"ipa":"/fɜːrɡɑːt/","approx":"fergaat"},"forgotten":{"ipa":"/fɜːrɡɑːtʌn/","approx":"fergaatan"},"found":{"ipa":"/faʊnd/","approx":"faund"},"function":{"ipa":"/fʌŋkʃʌn/","approx":"fangkshan"},"functioned":{"ipa":"/fʌŋkʃʌnd/","approx":"fangkshand"},"functioning":{"ipa":"/fʌŋkʃʌnɪŋ/","approx":"fangkshaning"},"gather":{"ipa":"/ɡæðɜːr/","approx":"gadher"},"gathered":{"ipa":"/ɡæðɜːrd/","approx":"gadherd"},"gathering":{"ipa":"/ɡæðɜːrɪŋ/","approx":"gadhering"},"gave":{"ipa":"/ɡeɪv/","approx":"geiv"},"get":{"ipa":"/ɡet/","approx":"get"},"getting":{"ipa":"/ɡetɪŋ/","approx":"gering"},"give":{"ipa":"/ɡɪv/","approx":"giv"},"given":{"ipa":"/ɡɪvʌn/","approx":"givan"},"giving":{"ipa":"/ɡɪvɪŋ/","approx":"giving"},"go":{"ipa":"/ɡoʊ/","approx":"gou"},"going":{"ipa":"/ɡoʊɪŋ/","approx":"gouing"},"gone":{"ipa":"/ɡɔːn/","approx":"gon"},"got":{"ipa":"/ɡɑːt/","approx":"gaat"},"got/gotten":{"ipa":"/ɡɑːt , ɡɑːtʌn/","approx":"gaat , gaatan"},"graduate":{"ipa":"/ɡrædʒʌwʌt/","approx":"grayawat"},"graduated":{"ipa":"/ɡrædʒuːeɪtɪd/","approx":"grayuueirid"},"graduating":{"ipa":"/ɡrædʒʌweɪtɪŋ/","approx":"grayaweiring"},"grew":{"ipa":"/ɡruː/","approx":"gruu"},"grow":{"ipa":"/ɡroʊ/","approx":"grou"},"growing":{"ipa":"/ɡroʊɪŋ/","approx":"grouing"},"grown":{"ipa":"/ɡroʊn/","approx":"groun"},"guess":{"ipa":"/ɡes/","approx":"ges"},"guessed":{"ipa":"/ɡest/","approx":"gest"},"guessing":{"ipa":"/ɡesɪŋ/","approx":"gesing"},"had":{"ipa":"/hæd/","approx":"had"},"handle":{"ipa":"/hændʌl/","approx":"handal"},"handled":{"ipa":"/hændʌld/","approx":"handald"},"handling":{"ipa":"/hændlɪŋ/","approx":"handling"},"happen":{"ipa":"/hæpʌn/","approx":"hapan"},"happened":{"ipa":"/hæpʌnd/","approx":"hapand"},"happening":{"ipa":"/hæpʌnɪŋ/","approx":"hapaning"},"hate":{"ipa":"/heɪt/","approx":"heit"},"hated":{"ipa":"/heɪtʌd/","approx":"heirad"},"hating":{"ipa":"/heɪtɪŋ/","approx":"heiring"},"have":{"ipa":"/hæv/","approx":"hav"},"having":{"ipa":"/hævɪŋ/","approx":"having"},"hear":{"ipa":"/hiːr/","approx":"hiir"},"heard":{"ipa":"/hɜːrd/","approx":"herd"},"hearing":{"ipa":"/hiːrɪŋ/","approx":"hiiring"},"heat":{"ipa":"/hiːt/","approx":"hiit"},"heated":{"ipa":"/hiːtʌd/","approx":"hiirad"},"heating":{"ipa":"/hiːtɪŋ/","approx":"hiiring"},"held":{"ipa":"/held/","approx":"held"},"help":{"ipa":"/help/","approx":"help"},"helped":{"ipa":"/helpt/","approx":"helpt"},"helping":{"ipa":"/helpɪŋ/","approx":"helping"},"hesitate":{"ipa":"/hezʌteɪt/","approx":"hezateit"},"hesitated":{"ipa":"/hezɪteɪtɪd/","approx":"heziteirid"},"hesitating":{"ipa":"/hezʌteɪtɪŋ/","approx":"hezateiring"},"hid":{"ipa":"/hɪd/","approx":"hid"},"hidden":{"ipa":"/hɪdʌn/","approx":"hidan"},"hide":{"ipa":"/haɪd/","approx":"haid"},"hiding":{"ipa":"/haɪdɪŋ/","approx":"haiding"},"hit":{"ipa":"/hɪt/","approx":"hit"},"hitting":{"ipa":"/hɪtɪŋ/","approx":"hiring"},"hold":{"ipa":"/hoʊld/","approx":"hould"},"holding":{"ipa":"/hoʊldɪŋ/","approx":"houlding"},"hope":{"ipa":"/hoʊp/","approx":"houp"},"hoped":{"ipa":"/hoʊpt/","approx":"houpt"},"hoping":{"ipa":"/hoʊpɪŋ/","approx":"houping"},"hug":{"ipa":"/hʌɡ/","approx":"hag"},"hugged":{"ipa":"/hʌɡd/","approx":"hagd"},"hugging":{"ipa":"/hʌɡɪŋ/","approx":"haging"},"hurt":{"ipa":"/hɜːrt/","approx":"hert"},"hurting":{"ipa":"/hɜːrtɪŋ/","approx":"herring"},"identified":{"ipa":"/aɪdentʌfaɪd/","approx":"aidentafaid"},"identify":{"ipa":"/aɪdentʌfaɪ/","approx":"aidentafai"},"identifying":{"ipa":"/aɪdentʌfaɪɪŋ/","approx":"aidentafaiing"},"imagine":{"ipa":"/ɪmædʒʌn/","approx":"imayan"},"imagined":{"ipa":"/ɪmædʒʌnd/","approx":"imayand"},"imagining":{"ipa":"/ɪmædʒʌnɪŋ/","approx":"imayaning"},"improve":{"ipa":"/ɪmpruːv/","approx":"impruuv"},"improved":{"ipa":"/ɪmpruːvd/","approx":"impruuvd"},"improving":{"ipa":"/ɪmpruːvɪŋ/","approx":"impruuving"},"include":{"ipa":"/ɪnkluːd/","approx":"inkluud"},"included":{"ipa":"/ɪnkluːdʌd/","approx":"inkluudad"},"including":{"ipa":"/ɪnkluːdɪŋ/","approx":"inkluuding"},"invite":{"ipa":"/ɪnvaɪt/","approx":"invait"},"invited":{"ipa":"/ɪnvaɪtʌd/","approx":"invairad"},"inviting":{"ipa":"/ɪnvaɪtɪŋ/","approx":"invairing"},"join":{"ipa":"/dʒɔɪn/","approx":"yoin"},"joined":{"ipa":"/dʒɔɪnd/","approx":"yoind"},"joining":{"ipa":"/dʒɔɪnɪŋ/","approx":"yoining"},"jump":{"ipa":"/dʒʌmp/","approx":"yamp"},"jumped":{"ipa":"/dʒʌmpt/","approx":"yampt"},"jumping":{"ipa":"/dʒʌmpɪŋ/","approx":"yamping"},"keep":{"ipa":"/kiːp/","approx":"kiip"},"keeping":{"ipa":"/kiːpɪŋ/","approx":"kiiping"},"kept":{"ipa":"/kept/","approx":"kept"},"kiss":{"ipa":"/kɪs/","approx":"kis"},"kissed":{"ipa":"/kɪst/","approx":"kist"},"kissing":{"ipa":"/kɪsɪŋ/","approx":"kising"},"knew":{"ipa":"/nuː/","approx":"nuu"},"know":{"ipa":"/noʊ/","approx":"nou"},"knowing":{"ipa":"/noʊɪŋ/","approx":"nouing"},"known":{"ipa":"/noʊn/","approx":"noun"},"lain":{"ipa":"/leɪn/","approx":"lein"},"laugh":{"ipa":"/læf/","approx":"laf"},"laughed":{"ipa":"/læft/","approx":"laft"},"laughing":{"ipa":"/læfɪŋ/","approx":"lafing"},"lay":{"ipa":"/leɪ/","approx":"lei"},"lead":{"ipa":"/led/","approx":"led"},"leading":{"ipa":"/liːdɪŋ/","approx":"liiding"},"learn":{"ipa":"/lɜːrn/","approx":"lern"},"learned":{"ipa":"/lɜːrnd/","approx":"lernd"},"learning":{"ipa":"/lɜːrnɪŋ/","approx":"lerning"},"leave":{"ipa":"/liːv/","approx":"liiv"},"leaving":{"ipa":"/liːvɪŋ/","approx":"liiving"},"led":{"ipa":"/led/","approx":"led"},"left":{"ipa":"/left/","approx":"left"},"lend":{"ipa":"/lend/","approx":"lend"},"lending":{"ipa":"/lendɪŋ/","approx":"lending"},"lent":{"ipa":"/lent/","approx":"lent"},"let":{"ipa":"/let/","approx":"let"},"letting":{"ipa":"/letɪŋ/","approx":"lering"},"lie":{"ipa":"/laɪ/","approx":"lai"},"like":{"ipa":"/laɪk/","approx":"laik"},"liked":{"ipa":"/laɪkt/","approx":"laikt"},"liking":{"ipa":"/laɪkɪŋ/","approx":"laiking"},"listen":{"ipa":"/lɪsʌn/","approx":"lisan"},"listened":{"ipa":"/lɪsʌnd/","approx":"lisand"},"listening":{"ipa":"/lɪsʌnɪŋ/","approx":"lisaning"},"live":{"ipa":"/laɪv/","approx":"laiv"},"lived":{"ipa":"/lɪvd/","approx":"livd"},"living":{"ipa":"/lɪvɪŋ/","approx":"living"},"look":{"ipa":"/lʊk/","approx":"luk"},"looked":{"ipa":"/lʊkt/","approx":"lukt"},"looking":{"ipa":"/lʊkɪŋ/","approx":"luking"},"lose":{"ipa":"/luːz/","approx":"luuz"},"losing":{"ipa":"/luːzɪŋ/","approx":"luuzing"},"lost":{"ipa":"/lɔːst/","approx":"lost"},"love":{"ipa":"/lʌv/","approx":"lav"},"loved":{"ipa":"/lʌvd/","approx":"lavd"},"loving":{"ipa":"/lʌvɪŋ/","approx":"laving"},"lying":{"ipa":"/laɪɪŋ/","approx":"laiing"},"made":{"ipa":"/meɪd/","approx":"meid"},"maintain":{"ipa":"/meɪnteɪn/","approx":"meintein"},"maintained":{"ipa":"/meɪnteɪnd/","approx":"meinteind"},"maintaining":{"ipa":"/meɪnteɪnɪŋ/","approx":"meinteining"},"make":{"ipa":"/meɪk/","approx":"meik"},"making":{"ipa":"/meɪkɪŋ/","approx":"meiking"},"manage":{"ipa":"/mænʌdʒ/","approx":"manaj"},"managed":{"ipa":"/mænʌdʒd/","approx":"manajd"},"managing":{"ipa":"/mænʌdʒɪŋ/","approx":"manajing"},"married":{"ipa":"/meriːd/","approx":"meriid"},"marry":{"ipa":"/meriː/","approx":"merii"},"marrying":{"ipa":"/meriːɪŋ/","approx":"meriing"},"matter":{"ipa":"/mætɜːr/","approx":"marer"},"mattered":{"ipa":"/mætɜːrd/","approx":"marerd"},"mattering":{"ipa":"/mætərɪŋ/","approx":"marering"},"mean":{"ipa":"/miːn/","approx":"miin"},"meaning":{"ipa":"/miːnɪŋ/","approx":"miining"},"meant":{"ipa":"/ment/","approx":"ment"},"meet":{"ipa":"/miːt/","approx":"miit"},"meeting":{"ipa":"/miːtɪŋ/","approx":"miiring"},"mention":{"ipa":"/menʃʌn/","approx":"menshan"},"mentioned":{"ipa":"/menʃʌnd/","approx":"menshand"},"mentioning":{"ipa":"/menʃʌnɪŋ/","approx":"menshaning"},"met":{"ipa":"/met/","approx":"met"},"miss":{"ipa":"/mɪs/","approx":"mis"},"missed":{"ipa":"/mɪst/","approx":"mist"},"missing":{"ipa":"/mɪsɪŋ/","approx":"mising"},"move":{"ipa":"/muːv/","approx":"muuv"},"moved":{"ipa":"/muːvd/","approx":"muuvd"},"moving":{"ipa":"/muːvɪŋ/","approx":"muuving"},"need":{"ipa":"/niːd/","approx":"niid"},"needing":{"ipa":"/niːdɪŋ/","approx":"niiding"},"needed":{"ipa":"/niːdʌd/","approx":"niidad"},"note":{"ipa":"/noʊt/","approx":"nout"},"noted":{"ipa":"/noʊtʌd/","approx":"nourad"},"notice":{"ipa":"/noʊtʌs/","approx":"nouras"},"noticed":{"ipa":"/noʊtʌst/","approx":"nourast"},"noticing":{"ipa":"/noʊtɪsɪŋ/","approx":"nourising"},"noting":{"ipa":"/noʊtɪŋ/","approx":"nouring"},"offer":{"ipa":"/ɔːfɜːr/","approx":"ofer"},"offered":{"ipa":"/ɔːfɜːrd/","approx":"oferd"},"offering":{"ipa":"/ɔːfərɪŋ/","approx":"ofering"},"open":{"ipa":"/oʊpʌn/","approx":"oupan"},"opened":{"ipa":"/oʊpʌnd/","approx":"oupand"},"opening":{"ipa":"/oʊpənɪŋ/","approx":"oupaning"},"order":{"ipa":"/ɔːrdɜːr/","approx":"order"},"ordered":{"ipa":"/ɔːrdɜːrd/","approx":"orderd"},"ordering":{"ipa":"/ɔːrdərɪŋ/","approx":"ordering"},"own":{"ipa":"/oʊn/","approx":"oun"},"owned":{"ipa":"/oʊnd/","approx":"ound"},"owning":{"ipa":"/oʊnɪŋ/","approx":"ouning"},"paid":{"ipa":"/peɪd/","approx":"peid"},"pass":{"ipa":"/pæs/","approx":"pas"},"passed":{"ipa":"/pæst/","approx":"past"},"passing":{"ipa":"/pæsɪŋ/","approx":"pasing"},"pay":{"ipa":"/peɪ/","approx":"pei"},"paying":{"ipa":"/peɪɪŋ/","approx":"peiing"},"perform":{"ipa":"/pɜːrfɔːrm/","approx":"perform"},"performed":{"ipa":"/pɜːrfɔːrmd/","approx":"performd"},"performing":{"ipa":"/pɜːrfɔːrmɪŋ/","approx":"performing"},"pick":{"ipa":"/pɪk/","approx":"pik"},"picked":{"ipa":"/pɪkt/","approx":"pikt"},"picking":{"ipa":"/pɪkɪŋ/","approx":"piking"},"place":{"ipa":"/pleɪs/","approx":"pleis"},"placed":{"ipa":"/pleɪst/","approx":"pleist"},"placing":{"ipa":"/pleɪsɪŋ/","approx":"pleising"},"plan":{"ipa":"/plæn/","approx":"plan"},"planned":{"ipa":"/plænd/","approx":"pland"},"planning":{"ipa":"/plænɪŋ/","approx":"planing"},"play":{"ipa":"/pleɪ/","approx":"plei"},"played":{"ipa":"/pleɪd/","approx":"pleid"},"playing":{"ipa":"/pleɪɪŋ/","approx":"pleiing"},"prefer":{"ipa":"/prʌfɜːr/","approx":"prafer"},"preferring":{"ipa":"/prʌfɜːrɪŋ/","approx":"prafering"},"preferred":{"ipa":"/prʌfɜːrd/","approx":"praferd"},"prepare":{"ipa":"/priːper/","approx":"priiper"},"prepared":{"ipa":"/priːperd/","approx":"priiperd"},"preparing":{"ipa":"/priːperɪŋ/","approx":"priipering"},"press":{"ipa":"/pres/","approx":"pres"},"pressed":{"ipa":"/prest/","approx":"prest"},"pressing":{"ipa":"/presɪŋ/","approx":"presing"},"prevent":{"ipa":"/prɪvent/","approx":"privent"},"prevented":{"ipa":"/prɪventɪd/","approx":"priventid"},"preventing":{"ipa":"/prɪventɪŋ/","approx":"priventing"},"produce":{"ipa":"/prʌduːs/","approx":"praduus"},"produced":{"ipa":"/prʌduːst/","approx":"praduust"},"producing":{"ipa":"/prʌduːsɪŋ/","approx":"praduusing"},"promise":{"ipa":"/prɑːmʌs/","approx":"praamas"},"promised":{"ipa":"/prɑːmʌst/","approx":"praamast"},"promising":{"ipa":"/prɑːmʌsɪŋ/","approx":"praamasing"},"protect":{"ipa":"/prʌtekt/","approx":"pratekt"},"protected":{"ipa":"/prʌtektɪd/","approx":"pratektid"},"protecting":{"ipa":"/prʌtektɪŋ/","approx":"pratekting"},"prove":{"ipa":"/pruːv/","approx":"pruuv"},"proved":{"ipa":"/pruːvd/","approx":"pruuvd"},"proven":{"ipa":"/pruːvʌn/","approx":"pruuvan"},"provide":{"ipa":"/prʌvaɪd/","approx":"pravaid"},"provided":{"ipa":"/prʌvaɪdɪd/","approx":"pravaidid"},"providing":{"ipa":"/prʌvaɪdɪŋ/","approx":"pravaiding"},"proving":{"ipa":"/pruːvɪŋ/","approx":"pruuving"},"pull":{"ipa":"/pʊl/","approx":"pul"},"pulled":{"ipa":"/pʊld/","approx":"puld"},"pulling":{"ipa":"/pʊlɪŋ/","approx":"puling"},"push":{"ipa":"/pʊʃ/","approx":"push"},"pushed":{"ipa":"/pʊʃt/","approx":"pusht"},"pushing":{"ipa":"/pʊʃɪŋ/","approx":"pushing"},"put":{"ipa":"/pʊt/","approx":"put"},"putting":{"ipa":"/pʌtɪŋ/","approx":"paring"},"quit":{"ipa":"/kwɪt/","approx":"kwit"},"quitting":{"ipa":"/kwɪtɪŋ/","approx":"kwiring"},"raise":{"ipa":"/reɪz/","approx":"reiz"},"raised":{"ipa":"/reɪzd/","approx":"reizd"},"raising":{"ipa":"/reɪzɪŋ/","approx":"reizing"},"ran":{"ipa":"/ræn/","approx":"ran"},"reach":{"ipa":"/riːtʃ/","approx":"riich"},"reached":{"ipa":"/riːtʃt/","approx":"riicht"},"reaching":{"ipa":"/riːtʃɪŋ/","approx":"riiching"},"read":{"ipa":"/red/","approx":"red"},"reading":{"ipa":"/riːdɪŋ/","approx":"riiding"},"realize":{"ipa":"/riːʌlaɪz/","approx":"riialaiz"},"realized":{"ipa":"/riːʌlaɪzd/","approx":"riialaizd"},"realizing":{"ipa":"/riːʌlaɪzɪŋ/","approx":"riialaizing"},"receive":{"ipa":"/rʌsiːv/","approx":"rasiiv"},"received":{"ipa":"/rʌsiːvd/","approx":"rasiivd"},"receiving":{"ipa":"/rʌsiːvɪŋ/","approx":"rasiiving"},"recognize":{"ipa":"/rekʌɡnaɪz/","approx":"rekagnaiz"},"recognized":{"ipa":"/rekʌɡnaɪzd/","approx":"rekagnaizd"},"recognizing":{"ipa":"/rekʌɡnaɪzɪŋ/","approx":"rekagnaizing"},"record":{"ipa":"/rʌkɔːrd/","approx":"rakord"},"recorded":{"ipa":"/rʌkɔːrdɪd/","approx":"rakordid"},"recording":{"ipa":"/rʌkɔːrdɪŋ/","approx":"rakording"},"reduce":{"ipa":"/rʌduːs/","approx":"raduus"},"reduced":{"ipa":"/rʌduːst/","approx":"raduust"},"reducing":{"ipa":"/rʌduːsɪŋ/","approx":"raduusing"},"refuse":{"ipa":"/rʌfjuːz/","approx":"rafyuuz"},"refused":{"ipa":"/rʌfjuːzd/","approx":"rafyuuzd"},"refusing":{"ipa":"/rʌfjuːzɪŋ/","approx":"rafyuuzing"},"reject":{"ipa":"/rɪdʒekt/","approx":"riyekt"},"rejected":{"ipa":"/rɪdʒektɪd/","approx":"riyektid"},"rejecting":{"ipa":"/rɪdʒektɪŋ/","approx":"riyekting"},"relax":{"ipa":"/rɪlæks/","approx":"rilaks"},"relaxed":{"ipa":"/rɪlækst/","approx":"rilakst"},"relaxing":{"ipa":"/rɪlæksɪŋ/","approx":"rilaksing"},"release":{"ipa":"/riːliːs/","approx":"riiliis"},"released":{"ipa":"/riːliːst/","approx":"riiliist"},"releasing":{"ipa":"/riːliːsɪŋ/","approx":"riiliising"},"remain":{"ipa":"/rɪmeɪn/","approx":"rimein"},"remained":{"ipa":"/rɪmeɪnd/","approx":"rimeind"},"remaining":{"ipa":"/rɪmeɪnɪŋ/","approx":"rimeining"},"remember":{"ipa":"/rɪmembɜːr/","approx":"rimember"},"remembered":{"ipa":"/rɪmembɜːrd/","approx":"rimemberd"},"remembering":{"ipa":"/rɪmembɜːrɪŋ/","approx":"rimembering"},"remove":{"ipa":"/riːmuːv/","approx":"riimuuv"},"removed":{"ipa":"/riːmuːvd/","approx":"riimuuvd"},"removing":{"ipa":"/riːmuːvɪŋ/","approx":"riimuuving"},"repair":{"ipa":"/rɪper/","approx":"riper"},"repaired":{"ipa":"/rɪperd/","approx":"riperd"},"repairing":{"ipa":"/rɪperɪŋ/","approx":"ripering"},"repeat":{"ipa":"/rɪpiːt/","approx":"ripiit"},"repeated":{"ipa":"/rɪpiːtɪd/","approx":"ripiirid"},"repeating":{"ipa":"/rɪpiːtɪŋ/","approx":"ripiiring"},"replace":{"ipa":"/riːpleɪs/","approx":"riipleis"},"replaced":{"ipa":"/riːpleɪst/","approx":"riipleist"},"replacing":{"ipa":"/rɪpleɪsɪŋ/","approx":"ripleising"},"report":{"ipa":"/riːpɔːrt/","approx":"riiport"},"reported":{"ipa":"/riːpɔːrtɪd/","approx":"riiporrid"},"reporting":{"ipa":"/riːpɔːrtɪŋ/","approx":"riiporring"},"require":{"ipa":"/riːkwaɪɜːr/","approx":"riikwaier"},"required":{"ipa":"/riːkwaɪɜːrd/","approx":"riikwaierd"},"requiring":{"ipa":"/riːkwaɪɜːrɪŋ/","approx":"riikwaiering"},"rest":{"ipa":"/rest/","approx":"rest"},"rested":{"ipa":"/restʌd/","approx":"restad"},"resting":{"ipa":"/restɪŋ/","approx":"resting"},"return":{"ipa":"/rɪtɜːrn/","approx":"ritern"},"returned":{"ipa":"/rɪtɜːrnd/","approx":"riternd"},"returning":{"ipa":"/rɪtɜːrnɪŋ/","approx":"riterning"},"rise":{"ipa":"/raɪz/","approx":"raiz"},"risen":{"ipa":"/rɪzʌn/","approx":"rizan"},"rising":{"ipa":"/raɪzɪŋ/","approx":"raizing"},"risk":{"ipa":"/rɪsk/","approx":"risk"},"risked":{"ipa":"/rɪskt/","approx":"riskt"},"risking":{"ipa":"/rɪskɪŋ/","approx":"risking"},"roll":{"ipa":"/roʊl/","approx":"roul"},"rolled":{"ipa":"/roʊld/","approx":"rould"},"rolling":{"ipa":"/roʊlɪŋ/","approx":"rouling"},"rose":{"ipa":"/roʊz/","approx":"rouz"},"run":{"ipa":"/rʌn/","approx":"ran"},"running":{"ipa":"/rʌnɪŋ/","approx":"raning"},"rush":{"ipa":"/rʌʃ/","approx":"rash"},"rushed":{"ipa":"/rʌʃt/","approx":"rasht"},"rushing":{"ipa":"/rʌʃɪŋ/","approx":"rashing"},"said":{"ipa":"/sed/","approx":"sed"},"sang":{"ipa":"/sæŋ/","approx":"sang"},"sat":{"ipa":"/sæt/","approx":"sat"},"save":{"ipa":"/seɪv/","approx":"seiv"},"saved":{"ipa":"/seɪvd/","approx":"seivd"},"saving":{"ipa":"/seɪvɪŋ/","approx":"seiving"},"saw":{"ipa":"/sɔː/","approx":"so"},"say":{"ipa":"/seɪ/","approx":"sei"},"saying":{"ipa":"/seɪɪŋ/","approx":"seiing"},"search":{"ipa":"/sɜːrtʃ/","approx":"serch"},"searched":{"ipa":"/sɜːrtʃt/","approx":"sercht"},"searching":{"ipa":"/sɜːrtʃɪŋ/","approx":"serching"},"see":{"ipa":"/siː/","approx":"sii"},"seeing":{"ipa":"/siːɪŋ/","approx":"siing"},"seem":{"ipa":"/siːm/","approx":"siim"},"seemed":{"ipa":"/siːmd/","approx":"siimd"},"seeming":{"ipa":"/siːmɪŋ/","approx":"siiming"},"seen":{"ipa":"/siːn/","approx":"siin"},"sell":{"ipa":"/sel/","approx":"sel"},"selling":{"ipa":"/selɪŋ/","approx":"seling"},"send":{"ipa":"/send/","approx":"send"},"sending":{"ipa":"/sendɪŋ/","approx":"sending"},"sent":{"ipa":"/sent/","approx":"sent"},"serve":{"ipa":"/sɜːrv/","approx":"serv"},"served":{"ipa":"/sɜːrvd/","approx":"servd"},"serving":{"ipa":"/sɜːrvɪŋ/","approx":"serving"},"set":{"ipa":"/set/","approx":"set"},"setting":{"ipa":"/setɪŋ/","approx":"sering"},"shake":{"ipa":"/ʃeɪk/","approx":"sheik"},"shaken":{"ipa":"/ʃeɪkʌn/","approx":"sheikan"},"shaking":{"ipa":"/ʃeɪkɪŋ/","approx":"sheiking"},"share":{"ipa":"/ʃer/","approx":"sher"},"shared":{"ipa":"/ʃerd/","approx":"sherd"},"sharing":{"ipa":"/ʃerɪŋ/","approx":"shering"},"shook":{"ipa":"/ʃʊk/","approx":"shuk"},"shoot":{"ipa":"/ʃuːt/","approx":"shuut"},"shooting":{"ipa":"/ʃuːtɪŋ/","approx":"shuuring"},"shot":{"ipa":"/ʃɑːt/","approx":"shaat"},"show":{"ipa":"/ʃoʊ/","approx":"shou"},"showed":{"ipa":"/ʃoʊd/","approx":"shoud"},"showing":{"ipa":"/ʃoʊɪŋ/","approx":"shouing"},"shown":{"ipa":"/ʃoʊn/","approx":"shoun"},"shut":{"ipa":"/ʃʌt/","approx":"shat"},"shutting":{"ipa":"/ʃʌtɪŋ/","approx":"sharing"},"sign":{"ipa":"/saɪn/","approx":"sain"},"signed":{"ipa":"/saɪnd/","approx":"saind"},"signing":{"ipa":"/saɪnɪŋ/","approx":"saining"},"sing":{"ipa":"/sɪŋ/","approx":"sing"},"singing":{"ipa":"/sɪŋɪŋ/","approx":"singing"},"sit":{"ipa":"/sɪt/","approx":"sit"},"sitting":{"ipa":"/sɪtɪŋ/","approx":"siring"},"sleep":{"ipa":"/sliːp/","approx":"sliip"},"sleeping":{"ipa":"/sliːpɪŋ/","approx":"sliiping"},"slept":{"ipa":"/slept/","approx":"slept"},"smile":{"ipa":"/smaɪl/","approx":"smail"},"smiled":{"ipa":"/smaɪld/","approx":"smaild"},"smiling":{"ipa":"/smaɪlɪŋ/","approx":"smailing"},"sold":{"ipa":"/soʊld/","approx":"sould"},"solve":{"ipa":"/sɑːlv/","approx":"saalv"},"solved":{"ipa":"/sɑːlvd/","approx":"saalvd"},"solving":{"ipa":"/sɑːlvɪŋ/","approx":"saalving"},"sound":{"ipa":"/saʊnd/","approx":"saund"},"sounded":{"ipa":"/saʊndɪd/","approx":"saundid"},"sounding":{"ipa":"/saʊndɪŋ/","approx":"saunding"},"speak":{"ipa":"/spiːk/","approx":"spiik"},"speaking":{"ipa":"/spiːkɪŋ/","approx":"spiiking"},"spend":{"ipa":"/spend/","approx":"spend"},"spending":{"ipa":"/spendɪŋ/","approx":"spending"},"spent":{"ipa":"/spent/","approx":"spent"},"spoke":{"ipa":"/spoʊk/","approx":"spouk"},"spoken":{"ipa":"/spoʊkʌn/","approx":"spoukan"},"stand":{"ipa":"/stænd/","approx":"stand"},"standing":{"ipa":"/stændɪŋ/","approx":"standing"},"start":{"ipa":"/stɑːrt/","approx":"staart"},"started":{"ipa":"/stɑːrtɪd/","approx":"staarrid"},"starting":{"ipa":"/stɑːrtɪŋ/","approx":"staarring"},"state":{"ipa":"/steɪt/","approx":"steit"},"stated":{"ipa":"/steɪtɪd/","approx":"steirid"},"stating":{"ipa":"/steɪtɪŋ/","approx":"steiring"},"stay":{"ipa":"/steɪ/","approx":"stei"},"stayed":{"ipa":"/steɪd/","approx":"steid"},"staying":{"ipa":"/steɪɪŋ/","approx":"steiing"},"steal":{"ipa":"/stiːl/","approx":"stiil"},"stealing":{"ipa":"/stiːlɪŋ/","approx":"stiiling"},"stick":{"ipa":"/stɪk/","approx":"stik"},"sticking":{"ipa":"/stɪkɪŋ/","approx":"stiking"},"stole":{"ipa":"/stoʊl/","approx":"stoul"},"stolen":{"ipa":"/stoʊlʌn/","approx":"stoulan"},"stood":{"ipa":"/stʊd/","approx":"stud"},"stop":{"ipa":"/stɑːp/","approx":"staap"},"stopped":{"ipa":"/stɑːpt/","approx":"staapt"},"stopping":{"ipa":"/stɑːpɪŋ/","approx":"staaping"},"store":{"ipa":"/stɔːr/","approx":"stor"},"stored":{"ipa":"/stɔːrd/","approx":"stord"},"storing":{"ipa":"/stɔːrɪŋ/","approx":"storing"},"strike":{"ipa":"/straɪk/","approx":"straik"},"striking":{"ipa":"/straɪkɪŋ/","approx":"straiking"},"struck":{"ipa":"/strʌk/","approx":"strak"},"stuck":{"ipa":"/stʌk/","approx":"stak"},"studied":{"ipa":"/stʌdiːd/","approx":"stadiid"},"study":{"ipa":"/stʌdiː/","approx":"stadii"},"studying":{"ipa":"/stʌdiːɪŋ/","approx":"stadiing"},"succeed":{"ipa":"/sʌksiːd/","approx":"saksiid"},"succeeded":{"ipa":"/sʌksiːdɪd/","approx":"saksiidid"},"succeeding":{"ipa":"/sʌksiːdɪŋ/","approx":"saksiiding"},"suffer":{"ipa":"/sʌfɜːr/","approx":"safer"},"suffered":{"ipa":"/sʌfɜːrd/","approx":"saferd"},"suffering":{"ipa":"/sʌfɜːrɪŋ/","approx":"safering"},"suggest":{"ipa":"/sʌdʒest/","approx":"sayest"},"suggested":{"ipa":"/sʌdʒestɪd/","approx":"sayestid"},"suggesting":{"ipa":"/sʌdʒestɪŋ/","approx":"sayesting"},"sung":{"ipa":"/sʌŋ/","approx":"sang"},"support":{"ipa":"/sʌpɔːrt/","approx":"saport"},"supported":{"ipa":"/sʌpɔːrtɪd/","approx":"saporrid"},"supporting":{"ipa":"/sʌpɔːrtɪŋ/","approx":"saporring"},"suppose":{"ipa":"/sʌpoʊz/","approx":"sapouz"},"supposed":{"ipa":"/sʌpoʊzd/","approx":"sapouzd"},"supposing":{"ipa":"/sʌpoʊzɪŋ/","approx":"sapouzing"},"survive":{"ipa":"/sɜːrvaɪv/","approx":"servaiv"},"survived":{"ipa":"/sɜːrvaɪvd/","approx":"servaivd"},"surviving":{"ipa":"/sɜːrvaɪvɪŋ/","approx":"servaiving"},"swam":{"ipa":"/swæm/","approx":"swam"},"swim":{"ipa":"/swɪm/","approx":"swim"},"swimming":{"ipa":"/swɪmɪŋ/","approx":"swiming"},"swum":{"ipa":"/swʌm/","approx":"swam"},"take":{"ipa":"/teɪk/","approx":"teik"},"taken":{"ipa":"/teɪkʌn/","approx":"teikan"},"taking":{"ipa":"/teɪkɪŋ/","approx":"teiking"},"talk":{"ipa":"/tɔːk/","approx":"tok"},"talked":{"ipa":"/tɔːkt/","approx":"tokt"},"talking":{"ipa":"/tɔːkɪŋ/","approx":"toking"},"taste":{"ipa":"/teɪst/","approx":"teist"},"tasted":{"ipa":"/teɪstɪd/","approx":"teistid"},"tasting":{"ipa":"/teɪstɪŋ/","approx":"teisting"},"taught":{"ipa":"/tɔːt/","approx":"tot"},"teach":{"ipa":"/tiːtʃ/","approx":"tiich"},"teaching":{"ipa":"/tiːtʃɪŋ/","approx":"tiiching"},"tell":{"ipa":"/tel/","approx":"tel"},"telling":{"ipa":"/telɪŋ/","approx":"teling"},"test":{"ipa":"/test/","approx":"test"},"tested":{"ipa":"/testɪd/","approx":"testid"},"testing":{"ipa":"/testɪŋ/","approx":"testing"},"thank":{"ipa":"/θæŋk/","approx":"thangk"},"thanked":{"ipa":"/θæŋkt/","approx":"thangkt"},"thanking":{"ipa":"/θæŋkɪŋ/","approx":"thangking"},"think":{"ipa":"/θɪŋk/","approx":"thingk"},"thinking":{"ipa":"/θɪŋkɪŋ/","approx":"thingking"},"thought":{"ipa":"/θɔːt/","approx":"thot"},"threw":{"ipa":"/θruː/","approx":"thruu"},"threw away":{"ipa":"/θruː ʌweɪ/","approx":"thruu awei"},"throw":{"ipa":"/θroʊ/","approx":"throu"},"throw away":{"ipa":"/θroʊ ʌweɪ/","approx":"throu awei"},"throwing":{"ipa":"/θroʊɪŋ/","approx":"throuing"},"throwing away":{"ipa":"/θroʊɪŋ ʌweɪ/","approx":"throuing awei"},"thrown":{"ipa":"/θroʊn/","approx":"throun"},"thrown away":{"ipa":"/θroʊn ʌweɪ/","approx":"throun awei"},"tie":{"ipa":"/taɪ/","approx":"tai"},"tied":{"ipa":"/taɪd/","approx":"taid"},"told":{"ipa":"/toʊld/","approx":"tould"},"took":{"ipa":"/tʊk/","approx":"tuk"},"touch":{"ipa":"/tʌtʃ/","approx":"tach"},"touched":{"ipa":"/tʌtʃt/","approx":"tacht"},"touching":{"ipa":"/tʌtʃɪŋ/","approx":"taching"},"train":{"ipa":"/treɪn/","approx":"trein"},"trained":{"ipa":"/treɪnd/","approx":"treind"},"training":{"ipa":"/treɪnɪŋ/","approx":"treining"},"travel":{"ipa":"/trævʌl/","approx":"traval"},"traveled":{"ipa":"/trævʌld/","approx":"travald"},"traveling":{"ipa":"/trævʌlɪŋ/","approx":"travaling"},"tried":{"ipa":"/traɪd/","approx":"traid"},"trust":{"ipa":"/trʌst/","approx":"trast"},"trusted":{"ipa":"/trʌstɪd/","approx":"trastid"},"trusting":{"ipa":"/trʌstɪŋ/","approx":"trasting"},"try":{"ipa":"/traɪ/","approx":"trai"},"trying":{"ipa":"/traɪɪŋ/","approx":"traiing"},"turn":{"ipa":"/tɜːrn/","approx":"tern"},"turn off":{"ipa":"/tɜːrn ɔːf/","approx":"tern of"},"turn on":{"ipa":"/tɜːrn ɑːn/","approx":"tern aan"},"turned":{"ipa":"/tɜːrnd/","approx":"ternd"},"turned off":{"ipa":"/tɜːrnd ɔːf/","approx":"ternd of"},"turned on":{"ipa":"/tɜːrnd ɑːn/","approx":"ternd aan"},"turning":{"ipa":"/tɜːrnɪŋ/","approx":"terning"},"turning off":{"ipa":"/tɜːrnɪŋ ɔːf/","approx":"terning of"},"turning on":{"ipa":"/tɜːrnɪŋ ɑːn/","approx":"terning aan"},"tying":{"ipa":"/taɪɪŋ/","approx":"taiing"},"understand":{"ipa":"/ʌndɜːrstænd/","approx":"anderstand"},"understanding":{"ipa":"/ʌndɜːrstændɪŋ/","approx":"anderstanding"},"understood":{"ipa":"/ʌndɜːrstʊd/","approx":"anderstud"},"use":{"ipa":"/juːs/","approx":"yuus"},"used":{"ipa":"/juːzd/","approx":"yuuzd"},"using":{"ipa":"/juːzɪŋ/","approx":"yuuzing"},"visit":{"ipa":"/vɪzɪt/","approx":"vizit"},"visited":{"ipa":"/vɪzɪtɪd/","approx":"vizirid"},"visiting":{"ipa":"/vɪzɪtɪŋ/","approx":"viziring"},"wait":{"ipa":"/weɪt/","approx":"weit"},"waited":{"ipa":"/weɪtɪd/","approx":"weirid"},"waiting":{"ipa":"/weɪtɪŋ/","approx":"weiring"},"wake":{"ipa":"/weɪk/","approx":"weik"},"waking":{"ipa":"/weɪkɪŋ/","approx":"weiking"},"walk":{"ipa":"/wɔːk/","approx":"wok"},"walked":{"ipa":"/wɔːkt/","approx":"wokt"},"walking":{"ipa":"/wɔːkɪŋ/","approx":"woking"},"want":{"ipa":"/wɑːnt/","approx":"waant"},"wanted":{"ipa":"/wɔːntɪd/","approx":"wontid"},"wanting":{"ipa":"/wɑːntɪŋ/","approx":"waanting"},"warn":{"ipa":"/wɔːrn/","approx":"worn"},"warned":{"ipa":"/wɔːrnd/","approx":"wornd"},"warning":{"ipa":"/wɔːrnɪŋ/","approx":"worning"},"was/were":{"ipa":"/wʌz , wɜːr/","approx":"waz , wer"},"wash":{"ipa":"/wɑːʃ/","approx":"waash"},"washed":{"ipa":"/wɑːʃt/","approx":"waasht"},"washing":{"ipa":"/wɑːʃɪŋ/","approx":"waashing"},"waste":{"ipa":"/weɪst/","approx":"weist"},"wasted":{"ipa":"/weɪstɪd/","approx":"weistid"},"wasting":{"ipa":"/weɪstɪŋ/","approx":"weisting"},"watch":{"ipa":"/wɑːtʃ/","approx":"waach"},"watched":{"ipa":"/wɑːtʃt/","approx":"waacht"},"watching":{"ipa":"/wɑːtʃɪŋ/","approx":"waaching"},"wave":{"ipa":"/weɪv/","approx":"weiv"},"waved":{"ipa":"/weɪvd/","approx":"weivd"},"waving":{"ipa":"/weɪvɪŋ/","approx":"weiving"},"wear":{"ipa":"/wer/","approx":"wer"},"wearing":{"ipa":"/werɪŋ/","approx":"wering"},"weigh":{"ipa":"/weɪ/","approx":"wei"},"weighed":{"ipa":"/weɪd/","approx":"weid"},"weighing":{"ipa":"/weɪɪŋ/","approx":"weiing"},"went":{"ipa":"/went/","approx":"went"},"win":{"ipa":"/wɪn/","approx":"win"},"winning":{"ipa":"/wɪnɪŋ/","approx":"wining"},"wish":{"ipa":"/wɪʃ/","approx":"wish"},"wished":{"ipa":"/wɪʃt/","approx":"wisht"},"wishing":{"ipa":"/wɪʃɪŋ/","approx":"wishing"},"woke":{"ipa":"/woʊk/","approx":"wouk"},"woken":{"ipa":"/woʊkʌn/","approx":"woukan"},"won":{"ipa":"/wʌn/","approx":"wan"},"wonder":{"ipa":"/wʌndɜːr/","approx":"wander"},"wondered":{"ipa":"/wʌndɜːrd/","approx":"wanderd"},"wondering":{"ipa":"/wʌndɜːrɪŋ/","approx":"wandering"},"wore":{"ipa":"/wɔːr/","approx":"wor"},"work":{"ipa":"/wɜːrk/","approx":"werk"},"work out":{"ipa":"/wɜːrk aʊt/","approx":"werk aut"},"worked":{"ipa":"/wɜːrkt/","approx":"werkt"},"worked out":{"ipa":"/wɜːrkt aʊt/","approx":"werkt aut"},"working":{"ipa":"/wɜːrkɪŋ/","approx":"werking"},"working out":{"ipa":"/wɜːrkɪŋ aʊt/","approx":"werking aut"},"worn":{"ipa":"/wɔːrn/","approx":"worn"},"worried":{"ipa":"/wɜːriːd/","approx":"weriid"},"worry":{"ipa":"/wɜːriː/","approx":"werii"},"worrying":{"ipa":"/wɜːriːɪŋ/","approx":"weriing"},"wrap":{"ipa":"/ræp/","approx":"rap"},"wrapped":{"ipa":"/ræpt/","approx":"rapt"},"wrapping":{"ipa":"/ræpɪŋ/","approx":"raping"},"write":{"ipa":"/raɪt/","approx":"rait"},"writing":{"ipa":"/raɪtɪŋ/","approx":"rairing"},"written":{"ipa":"/rɪtʌn/","approx":"ritan"},"wrote":{"ipa":"/roʊt/","approx":"rout"},"yell":{"ipa":"/jel/","approx":"yel"},"yelled":{"ipa":"/jeld/","approx":"yeld"},"yelling":{"ipa":"/jelɪŋ/","approx":"yeling"}};
+
+
+    // Pronunciaciones corregidas para gerundios generados por excepciones.
+    Object.assign(offlinePronDB, {
+      "being": {"ipa":"/ˈbiːɪŋ/","approx":"biiing"},
+      "forgetting": {"ipa":"/fərˈɡetɪŋ/","approx":"fergueting"},
+      "controlling": {"ipa":"/kənˈtroʊlɪŋ/","approx":"kantrouling"},
+      "preferring": {"ipa":"/prɪˈfɜːrɪŋ/","approx":"prifering"}
+    });
+
+
+
+    const STATE_KEY = 'verbquest_pro_state_v2';
+    const MASTERY_KEY = 'verbquest_pro_mastery_v2';
+    const PRON_KEY = 'verbquest_pro_pron_v2';
+
+    let uiLang = 'en';
+    let pool = [];
+    let current = null;
+    let correct = 0;
+    let wrong = 0;
+    let total = 0;
+    let streak = 0;
+    let bestStreak = 0;
+    let maxQuestions = 20;
+    let asked = 0;
+    let locked = false;
+    let timerId = null;
+    let timeLeft = 0;
+    let wrongQueue = [];
+    let reviewRound = false;
+    let recentHistory = [];
+    let voices = [];
+    let masteredVerbs = [];
+    let pronCache = {};
+    let questionRenderToken = 0;
+    let formsRenderToken = 0;
+
+    function t(k){ return UI[uiLang][k] ?? k; }
+
+    function formName(code){
+      const names = {
+        es: { inf:'infinitivo', past:'pasado', part:'participio', ger:'gerundio' },
+        en: { inf:'infinitive', past:'past', part:'participle', ger:'gerund' }
+      };
+      return names[uiLang][code] || code;
+    }
+
+    function modeLabel(k){
+      if(UI[uiLang].modeLabels[k]) return UI[uiLang].modeLabels[k];
+
+      let m = k.match(/^(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `${formName(m[1])} a ${formName(m[2])}`
+          : `${formName(m[1])} to ${formName(m[2])}`;
+      }
+
+      m = k.match(/^pron_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `pronunciación de ${formName(m[1])} a ${formName(m[2])}`
+          : `pronunciation from ${formName(m[1])} to ${formName(m[2])}`;
+      }
+
+      m = k.match(/^audio_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `escuchar ${formName(m[1])} y elegir ${formName(m[2])}`
+          : `listen to ${formName(m[1])} and choose ${formName(m[2])}`;
+      }
+
+      return k;
+    }
+
+    function promptLabel(k){
+      if(UI[uiLang].prompts[k]) return UI[uiLang].prompts[k];
+
+      let m = k.match(/^(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `¿Cuál es el ${formName(m[2])}?`
+          : `What is the ${formName(m[2])}?`;
+      }
+
+      m = k.match(/^pron_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `¿Cuál es el ${formName(m[2])}?`
+          : `What is the ${formName(m[2])}?`;
+      }
+
+      m = k.match(/^audio_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m){
+        return uiLang==='es'
+          ? `Escucha y elige el ${formName(m[2])}.`
+          : `Listen and choose the ${formName(m[2])}.`;
+      }
+
+      return k;
+    }
+
+    function normalize(s){
+      return (s || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/[’']/g,'')
+        .replace(/\s+/g,' ')
+        .trim();
+    }
+
+    function acceptedVariants(str){
+      return str.split('/').map(x => normalize(x)).filter(Boolean);
+    }
+
+    function shuffle(arr){
+      const a = [...arr];
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    function pickN(arr,n){
+      return shuffle(arr).slice(0, Math.min(n, arr.length));
+    }
+
+function makeGerund(base){
+  if(base.includes(' ')){
+    const p = base.split(' ');
+    p[0] = makeGerund(p[0]);
+    return p.join(' ');
+  }
+
+  const lower = base.toLowerCase();
+
+  // Casos que no se resuelven bien solo con reglas ortográficas simples.
+  // Incluye verbos con sílaba tónica final y algunos irregulares de gerundio.
+  const gerundOverrides = {
+    be: 'being',
+    begin: 'beginning',
+    forget: 'forgetting',
+    admit: 'admitting',
+    control: 'controlling',
+    prefer: 'preferring',
+    quit: 'quitting',
+    occur: 'occurring',
+    refer: 'referring',
+    permit: 'permitting',
+    regret: 'regretting',
+    format: 'formatting'
+  };
+
+  if(gerundOverrides[lower]){
+    return gerundOverrides[lower];
+  }
+
+  if(/ie$/i.test(base)) return base.replace(/ie$/i,'ying');
+
+  if(/[^e]e$/i.test(base) && !/(ee|oe|ye)$/i.test(base)){
+    return base.slice(0,-1) + 'ing';
+  }
+
+  // Doblar consonante solo en patrón CVC real para verbos cortos.
+  if(
+    /^[^aeiou]*[aeiou][^aeiouwxy]$/i.test(base) &&
+    !/(aa|ee|ii|oo|uu)$/i.test(base.slice(0, -1)) &&
+    base.length <= 5
+  ){
+    return base + base.slice(-1) + 'ing';
+  }
+
+  return base + 'ing';
+}
+
+
+
+    const spanishPastIrregular = {
+      andar:'anduvo', caber:'cupo', caer:'cayó', componer:'compuso', conducir:'condujo',
+      construir:'construyó', contener:'contuvo', creer:'creyó', dar:'dio', decir:'dijo',
+      detener:'detuvo', dormir:'durmió', estar:'estuvo', hacer:'hizo', haber:'hubo',
+      ir:'fue', leer:'leyó', mantener:'mantuvo', morir:'murió', obtener:'obtuvo', oír:'oyó',
+      pedir:'pidió', poder:'pudo', poner:'puso', preferir:'prefirió', prevenir:'previno',
+      producir:'produjo', querer:'quiso', saber:'supo', seguir:'siguió', sentir:'sintió',
+      ser:'fue', sostener:'sostuvo', suponer:'supuso', tener:'tuvo', traer:'trajo',
+      venir:'vino', ver:'vio'
+    };
+
+    const spanishParticipleIrregular = {
+      abrir:'abierto', caer:'caído', componer:'compuesto', creer:'creído', cubrir:'cubierto',
+      decir:'dicho', describir:'descrito', descubrir:'descubierto', devolver:'devuelto',
+      envolver:'envuelto', escribir:'escrito', hacer:'hecho', leer:'leído', morir:'muerto',
+      oír:'oído', poner:'puesto', resolver:'resuelto', romper:'roto', suponer:'supuesto',
+      traer:'traído', ver:'visto', volver:'vuelto'
+    };
+
+    const spanishGerundIrregular = {
+      caer:'cayendo', construir:'construyendo', creer:'creyendo', decir:'diciendo',
+      dormir:'durmiendo', ir:'yendo', leer:'leyendo', morir:'muriendo', oír:'oyendo',
+      pedir:'pidiendo', poder:'pudiendo', preferir:'prefiriendo', seguir:'siguiendo',
+      sentir:'sintiendo', traer:'trayendo', venir:'viniendo'
+    };
+
+    function conjugateSpanishInfinitive(infinitive, form){
+      if(form === 'inf') return infinitive;
+      if(form === 'past' && spanishPastIrregular[infinitive]) return spanishPastIrregular[infinitive];
+      if(form === 'part' && spanishParticipleIrregular[infinitive]) return spanishParticipleIrregular[infinitive];
+      if(form === 'ger' && spanishGerundIrregular[infinitive]) return spanishGerundIrregular[infinitive];
+
+      const ending = infinitive.slice(-2);
+      const stem = infinitive.slice(0, -2);
+      if(!['ar','er','ir'].includes(ending)) return infinitive;
+      if(form === 'past') return stem + (ending === 'ar' ? 'ó' : 'ió');
+      if(form === 'part') return stem + (ending === 'ar' ? 'ado' : 'ido');
+      if(form === 'ger') return stem + (ending === 'ar' ? 'ando' : 'iendo');
+      return infinitive;
+    }
+
+    function spanishForm(meaning, form){
+      return meaning.split('/').map(rawVariant => {
+        let variant = rawVariant.trim().replace(/\(se\)/i, 'se');
+        if(!variant || form === 'inf') return variant;
+
+        const words = variant.split(/\s+/);
+        const reflexive = words[0].endsWith('se');
+        const infinitive = reflexive ? words[0].slice(0, -2) : words[0];
+        const conjugated = conjugateSpanishInfinitive(infinitive, form);
+
+        if(conjugated === infinitive) return variant;
+        words[0] = reflexive && form === 'ger'
+          ? conjugated.replace(/ando$/, 'ándose').replace(/iendo$/, 'iéndose').replace(/yendo$/, 'yéndose')
+          : conjugated;
+        if(reflexive && form === 'past') words.unshift('se');
+        return words.join(' ');
+      }).join(' / ');
+    }
+
+    function regularPast(base){
+      if(base.includes(' ')){
+        const p = base.split(' ');
+        p[0] = regularPast(p[0]);
+        return p.join(' ');
+      }
+      if(/e$/i.test(base)) return base + 'd';
+      if(/[^aeiou]y$/i.test(base)) return base.slice(0,-1) + 'ied';
+      if(/[aeiou][bcdfghjklmnpqrstvwxyz]$/i.test(base) && base.length<=5 && !/[wxy]$/i.test(base)){
+        return base + base.slice(-1) + 'ed';
+      }
+      return base + 'ed';
+    }
+
+    function isIrregular(base,past,part){
+      const rp = regularPast(base).toLowerCase();
+      return !(past.toLowerCase()===rp && part.toLowerCase()===rp);
+    }
+
+    const verbsMaster = verbDataNoDup.map(v => ({
+      en:v[0],
+      past:v[1],
+      part:v[2],
+      es:v[3],
+      esPast:spanishForm(v[3], 'past'),
+      esPart:spanishForm(v[3], 'part'),
+      esGer:spanishForm(v[3], 'ger'),
+      ger:makeGerund(v[0]),
+      irregular:isIrregular(v[0],v[1],v[2])
+    }));
+
+    function getVerbId(verb){ return normalize(verb.en); }
+    function getAllVerbIds(){ return [...new Set(verbsMaster.map(v => getVerbId(v)))]; }
+
+    function saveMastered(){
+      localStorage.setItem(MASTERY_KEY, JSON.stringify([...new Set(masteredVerbs)]));
+    }
+
+    function loadMastered(){
+      try{
+        masteredVerbs = JSON.parse(localStorage.getItem(MASTERY_KEY) || '[]');
+        if(!Array.isArray(masteredVerbs)) masteredVerbs = [];
+      }catch(e){
+        masteredVerbs = [];
+      }
+    }
+
+    function updateMasteryUI(){
+      const all = getAllVerbIds();
+      const setAll = new Set(all);
+
+      masteredVerbs = [...new Set(masteredVerbs.filter(x => setAll.has(x)))];
+      saveMastered();
+
+      const done = masteredVerbs.length;
+      const totalIds = all.length;
+      const pct = totalIds ? Math.round(done*100/totalIds) : 0;
+
+      document.getElementById('masteryCount').textContent = `${done} / ${totalIds}`;
+      document.getElementById('masteryPercent').textContent = `${pct}%`;
+      document.getElementById('masteryBar').style.width = `${pct}%`;
+
+      const mastered = [...masteredVerbs].sort();
+      const unmastered = all.filter(x => !masteredVerbs.includes(x)).sort();
+
+      document.getElementById('masteredList').innerHTML =
+        mastered.length
+          ? mastered.map(v => `<span class="wordTag">${v}</span>`).join('')
+          : `<span class="small">${t('noMasteredYet')}</span>`;
+
+      document.getElementById('unmasteredList').innerHTML =
+        unmastered.length
+          ? unmastered.map(v => `<span class="wordTag pending">${v}</span>`).join('')
+          : `<span class="small">${t('allMastered')}</span>`;
+    }
+
+    function markVerbAsMastered(verb){
+      const id = getVerbId(verb);
+      if(!masteredVerbs.includes(id)){
+        masteredVerbs.push(id);
+        saveMastered();
+        updateMasteryUI();
+      }
+    }
+
+    function resetMastery(){
+      if(!confirm(t('resetMasteryConfirm'))) return;
+      masteredVerbs = [];
+      saveMastered();
+      updateMasteryUI();
+    }
+
+    function toggleModeGroup(group, checked){
+      document.querySelectorAll(`.modeCheck[data-mode-group="${group}"]`).forEach(ch => {
+        ch.checked = checked;
+      });
+      saveState();
+    }
+
+    function getSelectedModes(){
+      return [...document.querySelectorAll('.modeCheck:checked')].map(c => c.value);
+    }
+
+    function getChosenMode(){
+      const modes = getSelectedModes();
+      if(!modes.length){
+        alert(t('needMode'));
+        return null;
+      }
+      return modes[Math.floor(Math.random()*modes.length)];
+    }
+
+    function getChosenAnswerMode(){
+      const mode = document.getElementById('answerModeSelect').value;
+      if(mode !== 'mixed') return mode;
+      return Math.random() < 0.5 ? 'options' : 'write';
+    }
+
+    function getFilteredVerbs(){
+      const filter = document.getElementById('filterSelect').value;
+      let list = [...verbsMaster];
+
+      if(filter==='regular') list = list.filter(v => !v.irregular);
+      if(filter==='irregular') list = list.filter(v => v.irregular);
+      if(filter==='mastered') list = list.filter(v => masteredVerbs.includes(getVerbId(v)));
+      if(filter==='unmastered') list = list.filter(v => !masteredVerbs.includes(getVerbId(v)));
+
+      const count = parseInt(document.getElementById('verbCountSelect').value, 10);
+      if(count !== 9999) list = list.slice(0, count);
+
+      return list;
+    }
+
+    function getVerbValueByCode(verb, code){
+      if(!verb) return '';
+      if(code==='inf' || code==='en') return verb.en;
+      if(code==='past') return verb.past;
+      if(code==='part') return verb.part;
+      if(code==='ger') return verb.ger;
+      if(code==='es') return verb.es;
+      if(code==='esPast') return verb.esPast;
+      if(code==='esPart') return verb.esPart;
+      if(code==='esGer') return verb.esGer;
+      return '';
+    }
+
+    function getOptionFamilyCodes(targetCode){
+      return targetCode === 'es'
+        ? ['es','esPast','esPart','esGer']
+        : ['inf','past','part','ger'];
+    }
+
+    function optionText(opt){
+      if(opt && typeof opt === 'object') return opt.value || '';
+      return opt || '';
+    }
+
+    function optionCode(opt, fallback='inf'){
+      if(opt && typeof opt === 'object' && opt.code) return opt.code;
+      return fallback;
+    }
+
+    function optionVerb(opt){
+      if(opt && typeof opt === 'object') return opt.verb || null;
+      return null;
+    }
+
+    function makeOption(verb, code){
+      return {
+        verb,
+        code,
+        value: getVerbValueByCode(verb, code)
+      };
+    }
+
+    function pushUniqueOption(arr, opt, usedSet){
+      const value = optionText(opt);
+      const key = normalize(value);
+      if(!key || usedSet.has(key)) return false;
+      usedSet.add(key);
+      arr.push(opt);
+      return true;
+    }
+
+    function similarityKey(value){
+      return normalize(value).replace(/\s*\/\s*/g, ' ');
+    }
+
+    function sharedPrefixLen(a,b){
+      let i = 0;
+      while(i < a.length && i < b.length && a[i] === b[i]) i++;
+      return i;
+    }
+
+    function sharedSuffixLen(a,b){
+      let i = 0;
+      while(i < a.length && i < b.length && a[a.length - 1 - i] === b[b.length - 1 - i]) i++;
+      return i;
+    }
+
+    function levenshtein(a,b){
+      if(a === b) return 0;
+      if(!a.length) return b.length;
+      if(!b.length) return a.length;
+
+      const prev = Array(b.length + 1).fill(0);
+      const curr = Array(b.length + 1).fill(0);
+
+      for(let j=0; j<=b.length; j++) prev[j] = j;
+
+      for(let i=1; i<=a.length; i++){
+        curr[0] = i;
+        for(let j=1; j<=b.length; j++){
+          const cost = a[i-1] === b[j-1] ? 0 : 1;
+          curr[j] = Math.min(
+            prev[j] + 1,
+            curr[j-1] + 1,
+            prev[j-1] + cost
+          );
+        }
+        for(let j=0; j<=b.length; j++) prev[j] = curr[j];
+      }
+
+      return prev[b.length];
+    }
+
+    function similarityScore(correctValue, candidateValue, correctVerb, candidateVerb, targetCode, candidateCode){
+      const a = similarityKey(correctValue);
+      const b = similarityKey(candidateValue);
+      if(!a || !b) return -Infinity;
+
+      const maxLen = Math.max(a.length, b.length, 1);
+      const distance = levenshtein(a, b);
+      let score = (maxLen - distance);
+
+      score += sharedPrefixLen(a, b) * 1.4;
+      score += sharedSuffixLen(a, b) * 1.1;
+      score -= Math.abs(a.length - b.length) * 0.35;
+
+      if(a[0] && b[0] && a[0] === b[0]) score += 1.25;
+      if(targetCode !== 'es' && correctVerb && candidateVerb && correctVerb.irregular === candidateVerb.irregular) score += 1.2;
+      if(candidateCode === targetCode) score += 0.75;
+
+      return score;
+    }
+
+    function detectOptionMeta(opt, mode){
+      const targetCode = getTargetCodeFromMode(mode);
+
+      if(opt && typeof opt === 'object'){
+        return {
+          verb: optionVerb(opt),
+          code: optionCode(opt, targetCode),
+          value: optionText(opt)
+        };
+      }
+
+      const familyCodes = getOptionFamilyCodes(targetCode);
+      const normOpt = normalize(opt);
+
+      for(const verb of verbsMaster){
+        for(const code of familyCodes){
+          const value = getVerbValueByCode(verb, code);
+          if(normalize(value) === normOpt){
+            return { verb, code, value };
+          }
+        }
+      }
+
+      return { verb:null, code:targetCode, value:opt };
+    }
+
+    function buildOptions(correctVerb, targetCode='inf'){
+      const correctOption = makeOption(correctVerb, targetCode);
+      const correctValue = optionText(correctOption);
+      const familyCodes = getOptionFamilyCodes(targetCode);
+      const used = new Set([normalize(correctValue)]);
+      const distractors = [];
+
+      familyCodes.forEach(code => {
+        if(code === targetCode) return;
+        const opt = makeOption(correctVerb, code);
+        if(normalize(optionText(opt)) !== normalize(correctValue)){
+          pushUniqueOption(distractors, opt, used);
+        }
+      });
+
+      if(distractors.length < 3){
+        const ranked = [];
+
+        pool.forEach(verb => {
+          if(verb === correctVerb) return;
+
+          familyCodes.forEach(code => {
+            const opt = makeOption(verb, code);
+            const value = optionText(opt);
+            const key = normalize(value);
+            if(!key || used.has(key)) return;
+
+            ranked.push({
+              opt,
+              score: similarityScore(correctValue, value, correctVerb, verb, targetCode, code)
+            });
+          });
+        });
+
+        ranked.sort((a,b) => b.score - a.score || optionText(a.opt).length - optionText(b.opt).length || optionText(a.opt).localeCompare(optionText(b.opt)));
+
+        for(const item of ranked){
+          if(distractors.length >= 3) break;
+          pushUniqueOption(distractors, item.opt, used);
+        }
+      }
+
+      if(distractors.length < 3){
+        const fallback = [];
+
+        pool.forEach(verb => {
+          if(verb === correctVerb) return;
+          familyCodes.forEach(code => {
+            const opt = makeOption(verb, code);
+            const value = optionText(opt);
+            const key = normalize(value);
+            if(!key || used.has(key)) return;
+            fallback.push(opt);
+          });
+        });
+
+        for(const opt of shuffle(fallback)){
+          if(distractors.length >= 3) break;
+          pushUniqueOption(distractors, opt, used);
+        }
+      }
+
+      return shuffle([correctOption, ...distractors.slice(0,3)]);
+    }
+
+    function ipaToApprox(ipa){
+      if(!ipa) return '';
+      let s = ipa.toLowerCase();
+      s = s.replace(/[ˈˌ]/g,'').replace(/\//g,'');
+      s = s.replace(/ɜːr|ɝː/g,'er').replace(/ər/g,'er');
+      s = s.replace(/eɪ/g,'ei').replace(/aɪ/g,'ai').replace(/ɔɪ/g,'oi');
+      s = s.replace(/aʊ/g,'au').replace(/oʊ/g,'ou');
+      s = s.replace(/iː/g,'ii').replace(/uː/g,'uu');
+      s = s.replace(/ɔː/g,'oo').replace(/ɑː/g,'aa');
+      s = s.replace(/æ/g,'a').replace(/ʌ/g,'a').replace(/ə/g,'e');
+      s = s.replace(/ɪ/g,'i').replace(/ɛ/g,'e').replace(/ʊ/g,'u');
+      s = s.replace(/ŋ/g,'ng').replace(/tʃ/g,'ch').replace(/dʒ/g,'j');
+      s = s.replace(/ʃ/g,'sh').replace(/ʒ/g,'zh').replace(/θ/g,'th').replace(/ð/g,'dh');
+      s = s.replace(/j/g,'y').replace(/ɡ/g,'g').replace(/\s+/g,' ');
+      return s.trim();
+    }
+
+    function savePronCache(){
+      try{ localStorage.setItem(PRON_KEY, JSON.stringify(pronCache)); }catch(e){}
+    }
+
+    function loadPronCache(){
+      try{
+        pronCache = JSON.parse(localStorage.getItem(PRON_KEY) || '{}');
+      }catch(e){
+        pronCache = {};
+      }
+    }
+
+    async function fetchWordPron(word){
+      const key = normalize(word);
+      if(!key) return { ipa:'', approx:'' };
+
+      if(pronCache[key]) return pronCache[key];
+
+      if(manualPron[key]){
+        const out = { ipa: manualPron[key], approx: ipaToApprox(manualPron[key]) };
+        pronCache[key] = out;
+        savePronCache();
+        return out;
+      }
+
+      if(!navigator.onLine){
+        const out = { ipa:'', approx:'' };
+        pronCache[key] = out;
+        savePronCache();
+        return out;
+      }
+
+      try{
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2000);
+
+        const res = await fetch(
+          `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(key)}`,
+          { signal: controller.signal }
+        );
+
+        clearTimeout(timeout);
+
+        if(!res.ok) throw new Error('No encontrado');
+        const data = await res.json();
+
+        let ipa = '';
+
+        if(Array.isArray(data)){
+          for(const entry of data){
+            if(entry.phonetic && !ipa) ipa = entry.phonetic;
+            if(entry.phonetics && Array.isArray(entry.phonetics)){
+              const found = entry.phonetics.find(p => p.text);
+              if(found && found.text && !ipa) ipa = found.text;
+            }
+            if(ipa) break;
+          }
+        }
+
+        const out = { ipa: ipa || '', approx: ipa ? ipaToApprox(ipa) : '' };
+        pronCache[key] = out;
+        savePronCache();
+        return out;
+      } catch(e){
+        const out = { ipa:'', approx:'' };
+        pronCache[key] = out;
+        savePronCache();
+        return out;
+      }
+    }
+
+    async function getPronunciation(text, context='default'){
+      const normalized = normalize(text);
+
+      if(context === 'read_present'){
+        return { ipa: manualPron.read_present, approx: 'riid' };
+      }
+
+      if(context === 'read_past'){
+        return { ipa: manualPron.read_past, approx: 'red' };
+      }
+
+      if(context === 'read_part'){
+        return { ipa: manualPron.read_part, approx: 'red' };
+      }
+
+      if(!normalized) return { ipa:'', approx:'' };
+
+      if(offlinePronDB[normalized]){
+        return offlinePronDB[normalized];
+      }
+
+      if(manualPron[normalized]){
+        return { ipa: manualPron[normalized], approx: ipaToApprox(manualPron[normalized]) };
+      }
+
+      if(normalized.includes('/')){
+        const parts = normalized.split('/').map(x => x.trim()).filter(Boolean);
+        const results = parts.map(p => offlinePronDB[p] || { ipa:'', approx:'' });
+        return {
+          ipa: results.map(r => r.ipa).filter(Boolean).join(' , '),
+          approx: results.map(r => r.approx).filter(Boolean).join(' , ')
+        };
+      }
+
+      if(normalized.includes(' ')){
+        const parts = normalized.split(' ').map(x => x.trim()).filter(Boolean);
+        const results = parts.map(p => offlinePronDB[p] || { ipa:'', approx:'' });
+        return {
+          ipa: results.map(r => r.ipa).filter(Boolean).join(' '),
+          approx: results.map(r => r.approx).filter(Boolean).join(' ')
+        };
+      }
+
+      return { ipa:'', approx:'' };
+    }
+
+    function firstVariant(s){
+      return (s || '').split('/')[0].trim();
+    }
+
+    function sourceDisplayInfo(verb, code){
+      if(code==='inf') return { text: verb.en, speak: verb.en, context: verb.en==='read' ? 'read_present' : 'default' };
+      if(code==='past') return { text: verb.past, speak: firstVariant(verb.past), context: verb.en==='read' ? 'read_past' : 'default' };
+      if(code==='part') return { text: verb.part, speak: firstVariant(verb.part), context: verb.en==='read' ? 'read_part' : 'default' };
+      if(code==='ger') return { text: verb.ger, speak: verb.ger, context: 'default' };
+      if(code==='es') return { text: verb.es, speak: verb.en, context: verb.en==='read' ? 'read_present' : 'default' };
+      return { text: verb.en, speak: verb.en, context: 'default' };
+    }
+
+    function targetValue(verb, code){
+      if(code==='inf') return verb.en;
+      if(code==='past') return verb.past;
+      if(code==='part') return verb.part;
+      if(code==='ger') return verb.ger;
+      if(code==='es') return verb.es;
+      return verb.en;
+    }
+
+    function spanishValue(verb, code){
+      if(code==='inf') return verb.es;
+      if(code==='past') return verb.esPast;
+      if(code==='part') return verb.esPart;
+      if(code==='ger') return verb.esGer;
+      return '';
+    }
+
+    function targetExtractor(code){
+      if(code==='inf') return x => x.en;
+      if(code==='past') return x => x.past;
+      if(code==='part') return x => x.part;
+      if(code==='ger') return x => x.ger;
+      if(code==='es') return x => x.es;
+      return x => x.en;
+    }
+
+    async function buildQuestionFromVerb(verb, forcedMode=null, forcedAnswerMode=null){
+      const mode = forcedMode || getChosenMode();
+      if(!mode) return null;
+
+      const answerMode = forcedAnswerMode || getChosenAnswerMode();
+
+      let questionText = '';
+      let correctAnswer = '';
+      let options = [];
+      let speakText = verb.en;
+      let displayForm = verb.en;
+      let pronContext = 'default';
+      let questionTranslation = '';
+      let sourceCode = 'inf';
+      let targetCode = getTargetCodeFromMode(mode);
+
+      if(mode==='en_to_es'){
+        sourceCode = 'inf';
+        targetCode = 'es';
+        questionText = verb.en;
+        correctAnswer = verb.es;
+        options = buildOptions(verb, targetCode);
+        displayForm = verb.en;
+        speakText = verb.en;
+      } else if(mode==='es_to_en'){
+        sourceCode = 'es';
+        targetCode = 'inf';
+        questionText = verb.es;
+        correctAnswer = verb.en;
+        options = buildOptions(verb, targetCode);
+        displayForm = verb.en;
+        speakText = verb.en;
+      } else {
+        let m = mode.match(/^(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+
+        if(m){
+          sourceCode = m[1];
+          targetCode = m[2];
+          const src = sourceDisplayInfo(verb, sourceCode);
+          questionText = src.text;
+          correctAnswer = targetValue(verb, targetCode);
+          options = buildOptions(verb, targetCode);
+          displayForm = src.speak;
+          speakText = src.speak;
+          pronContext = src.context;
+          questionTranslation = spanishValue(verb, sourceCode);
+        } else {
+          m = mode.match(/^pron_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+          if(m){
+            sourceCode = m[1];
+            targetCode = m[2];
+            const src = sourceDisplayInfo(verb, sourceCode);
+            const p = await getPronunciation(src.speak, src.context);
+            questionText = p.ipa || p.approx || src.speak;
+            correctAnswer = targetValue(verb, targetCode);
+            options = buildOptions(verb, targetCode);
+            displayForm = src.speak;
+            speakText = src.speak;
+            pronContext = src.context;
+            questionTranslation = spanishValue(verb, sourceCode);
+          } else {
+            m = mode.match(/^audio_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+            if(m){
+              sourceCode = m[1];
+              targetCode = m[2];
+              const src = sourceDisplayInfo(verb, sourceCode);
+              questionText = promptLabel(mode);
+              correctAnswer = targetValue(verb, targetCode);
+              options = buildOptions(verb, targetCode);
+              displayForm = src.speak;
+              speakText = src.speak;
+              pronContext = src.context;
+              questionTranslation = spanishValue(verb, sourceCode);
+            }
+          }
+        }
+      }
+
+      return {
+        verb,
+        mode,
+        answerMode,
+        questionText,
+        prompt: promptLabel(mode),
+        correctAnswer,
+        correctAnswerCode: targetCode,
+        sourceCode,
+        targetCode,
+        options,
+        speakText,
+        displayForm,
+        pronContext,
+        questionTranslation
+      };
+    }
+
+    async function renderQuestionPronunciation(token){
+      const showIPA = document.getElementById('showIPA').checked;
+      const showApprox = document.getElementById('showApprox').checked;
+
+      const ipaEl = document.getElementById('ipaText');
+      const approxEl = document.getElementById('approxText');
+
+      ipaEl.textContent = '';
+      approxEl.textContent = '';
+
+      if(!current) return;
+      if(!showIPA && !showApprox) return;
+
+if(current.mode === 'es_to_en' || current.mode.startsWith('audio_')){
+  ipaEl.textContent = '';
+  approxEl.textContent = '';
+  return;
+}
+
+      ipaEl.textContent = showIPA ? t('loadingPron') : '';
+      ipaEl.classList.add('loading');
+
+      const localForm = current.displayForm;
+      const localContext = current.pronContext || 'default';
+      const p = await getPronunciation(localForm, localContext);
+
+      if(token !== questionRenderToken) return;
+
+      ipaEl.classList.remove('loading');
+
+      const hasPron = !!(p && (p.ipa || p.approx));
+
+      if(!hasPron){
+        ipaEl.textContent = showIPA ? `${t('ipa')}: ${t('notAvailable')}` : '';
+        approxEl.textContent = showApprox ? `${t('approx')}: ${t('notAvailable')}` : '';
+        return;
+      }
+
+      ipaEl.textContent = showIPA ? `${t('ipa')}: ${p.ipa || t('notAvailable')}` : '';
+      approxEl.textContent = showApprox ? `${t('approx')}: ${p.approx || t('notAvailable')}` : '';
+    }
+
+    async function renderFormsBlock(verb, token){
+      const block = document.getElementById('formsPronBlock');
+      if(!block) return;
+
+      block.innerHTML = t('loadingPron');
+
+      async function formPron(labelKey, value){
+        if(labelKey === 'infinitive' && verb.en === 'read'){
+          return await getPronunciation(value, 'read_present');
+        }
+        if(labelKey === 'past' && verb.en === 'read'){
+          return await getPronunciation(value, 'read_past');
+        }
+        if(labelKey === 'participle' && verb.en === 'read'){
+          return await getPronunciation(value, 'read_part');
+        }
+        return await getPronunciation(value);
+      }
+
+      const lines = [];
+      const forms = [
+        ['infinitive', verb.en, verb.es],
+        ['past', verb.past, verb.esPast],
+        ['participle', verb.part, verb.esPart],
+        ['gerund', verb.ger, verb.esGer]
+      ];
+
+      for(const [labelKey, value, spanishValue] of forms){
+        if(token !== formsRenderToken) return;
+
+        if(value.includes('/')){
+          const variants = value.split('/').map(x => x.trim()).filter(Boolean);
+          const pieces = [];
+
+          for(const variant of variants){
+            const p = await formPron(labelKey, variant);
+            if(token !== formsRenderToken) return;
+            pieces.push(`• ${variant} | ${t('ipa')}: ${p.ipa || t('notAvailable')} | ${t('approx')}: ${p.approx || t('notAvailable')}`);
+          }
+
+          lines.push(`
+            <div class="formLine">
+              <span class="formWord">${t(labelKey)}:</span> ${value}<br>
+              ${t('spanish')}: ${spanishValue}<br>
+              ${pieces.join('<br>')}
+            </div>
+          `);
+        } else {
+          const p = await formPron(labelKey, value);
+          if(token !== formsRenderToken) return;
+
+          lines.push(`
+            <div class="formLine">
+              <span class="formWord">${t(labelKey)}:</span> ${value}<br>
+              ${t('spanish')}: ${spanishValue}<br>
+              ${t('ipa')}: ${p.ipa || t('notAvailable')} | ${t('approx')}: ${p.approx || t('notAvailable')}
+            </div>
+          `);
+        }
+      }
+
+      if(token !== formsRenderToken) return;
+      block.innerHTML = lines.join('');
+    }
+
+
+    function getTargetCodeFromMode(mode){
+      if(mode === 'en_to_es') return 'es';
+      if(mode === 'es_to_en') return 'inf';
+
+      let m = mode.match(/^(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m) return m[2];
+
+      m = mode.match(/^pron_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m) return m[2];
+
+      m = mode.match(/^audio_(inf|past|part|ger)_to_(inf|past|part|ger)$/);
+      if(m) return m[2];
+
+      return 'inf';
+    }
+
+    function getPronContextForTarget(verb, targetCode){
+      if(verb.en === 'read'){
+        if(targetCode === 'inf') return 'read_present';
+        if(targetCode === 'past') return 'read_past';
+        if(targetCode === 'part') return 'read_part';
+      }
+      return 'default';
+    }
+
+    function findVerbForOption(opt, mode){
+      return detectOptionMeta(opt, mode).verb;
+    }
+
+    async function enrichOptionButton(button, opt, mode, token){
+      const targetCode = getTargetCodeFromMode(mode);
+      const showIPA = document.getElementById('showIPA').checked;
+      const showApprox = document.getElementById('showApprox').checked;
+      const isTranslationMode = mode === 'en_to_es' || mode === 'es_to_en';
+
+      const optionMeta = detectOptionMeta(opt, mode);
+      const verb = optionMeta.verb;
+      const optionCodeValue = optionMeta.code || targetCode;
+      const optionValue = optionText(opt) || optionMeta.value || '';
+
+      let ipa = '';
+      let approx = '';
+      let translation = '';
+
+      if(verb && optionCodeValue !== 'es' && optionCodeValue !== 'esPast' && optionCodeValue !== 'esPart' && optionCodeValue !== 'esGer' && (showIPA || showApprox)){
+        const context = getPronContextForTarget(verb, optionCodeValue);
+        const p = await getPronunciation(optionValue, context);
+        ipa = p.ipa || '';
+        approx = p.approx || '';
+      }
+
+      if(verb && !isTranslationMode){
+        translation = spanishValue(verb, optionCodeValue);
+      }
+
+      if(token !== questionRenderToken) return;
+
+      let html = `<div class="answerMain">${optionValue}</div>`;
+
+      if(mode !== 'en_to_es'){
+        if(showIPA){
+          html += `<div class="answerMeta answerIpa">${t('ipa')}: ${ipa || t('notAvailable')}</div>`;
+        }
+
+        if(showApprox){
+          html += `<div class="answerMeta answerApprox">${t('approx')}: ${approx || t('notAvailable')}</div>`;
+        }
+      }
+
+      if(translation){
+        html += `<div class="answerMeta answerTranslation">${t('spanish')}: ${translation}</div>`;
+      }
+
+      button.innerHTML = html;
+    }
+
+    function renderQuestion(){
+      document.getElementById('modeTag').textContent = `${t('currentMode')}: ${modeLabel(current.mode)}`;
+      document.getElementById('answerTag').textContent = `${t('answer')}: ${current.answerMode==='options' ? UI[uiLang].answerTypeOptions : UI[uiLang].answerTypeWrite}`;
+      document.getElementById('promptText').textContent = promptLabel(current.mode);
+      document.getElementById('questionText').textContent = current.questionText;
+      document.getElementById('translationText').textContent = current.questionTranslation
+        ? `${t('spanish')}: ${current.questionTranslation}`
+        : '';
+      document.getElementById('extraInfo').textContent = `${reviewRound ? t('reviewErrors') : t('normalPractice')} | ${current.verb.irregular ? t('irregular') : t('regular')}`;
+
+      document.getElementById('formsPronBlock').innerHTML = '';
+      document.getElementById('ipaText').textContent = '';
+      document.getElementById('approxText').textContent = '';
+
+const pronounceBtn = document.getElementById('pronounceBtn');
+if(current.mode === 'es_to_en'){
+  pronounceBtn.style.display = 'none';
+} else {
+  pronounceBtn.style.display = 'inline-block';
+}
+
+      const feedback = document.getElementById('feedback');
+      feedback.style.display = 'none';
+      feedback.className = 'feedback';
+      feedback.textContent = '';
+      document.getElementById('nextBtn').style.display = 'none';
+
+      const optionsArea = document.getElementById('optionsArea');
+      const writeArea = document.getElementById('writeArea');
+      optionsArea.innerHTML = '';
+
+      if(current.answerMode==='options'){
+        optionsArea.style.display = 'grid';
+        writeArea.style.display = 'none';
+        const resultBox = document.getElementById('writeResultBox');
+        const input = document.getElementById('writeInput');
+        const submitBtn = document.getElementById('submitBtn');
+        if(resultBox){
+          resultBox.innerHTML = '';
+          resultBox.className = 'write-result-box';
+          resultBox.style.display = 'none';
+        }
+        if(input){
+          input.disabled = false;
+          input.style.display = 'block';
+        }
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.style.display = '';
+        }
+
+        const localToken = questionRenderToken;
+
+        current.options.forEach(opt => {
+          const b = document.createElement('button');
+          b.className = 'answer';
+          b.dataset.answerValue = optionText(opt);
+          b.dataset.answerCode = optionCode(opt, current.correctAnswerCode || current.targetCode || 'inf');
+          b.innerHTML = `<div class="answerMain">${optionText(opt)}</div>`;
+          b.onclick = () => answer(opt);
+          optionsArea.appendChild(b);
+
+          enrichOptionButton(b, opt, current.mode, localToken);
+        });
+      } else {
+        optionsArea.style.display = 'none';
+        writeArea.style.display = 'block';
+        const input = document.getElementById('writeInput');
+        const resultBox = document.getElementById('writeResultBox');
+        const submitBtn = document.getElementById('submitBtn');
+        input.value = '';
+        input.disabled = false;
+        input.style.display = 'block';
+        if(resultBox){
+          resultBox.innerHTML = '';
+          resultBox.className = 'write-result-box';
+          resultBox.style.display = 'none';
+        }
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.style.display = '';
+        }
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function isCorrect(input, correctAnswer, mode){
+      const a = normalize(input);
+      if(!a) return false;
+
+      if(mode === 'en_to_es'){
+        const full = normalize(correctAnswer);
+        const vars = acceptedVariants(correctAnswer);
+        return a === full || vars.includes(a);
+      }
+
+      if(correctAnswer.includes('/')){
+        const full = normalize(correctAnswer);
+        const vars = acceptedVariants(correctAnswer);
+        return a === full || vars.includes(a);
+      }
+
+      return a === normalize(correctAnswer);
+    }
+
+    function updateStats(){
+      document.getElementById('correctCount').textContent = correct;
+      document.getElementById('wrongCount').textContent = wrong;
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('accuracy').textContent = total ? Math.round(correct*100/total) + '%' : '0%';
+      document.getElementById('streak').textContent = streak;
+      document.getElementById('bestStreak').textContent = bestStreak;
+    }
+
+    function addHistory(ok, selected){
+      const shownSelected = optionText(selected) || selected || '(vacío)';
+      recentHistory.unshift({
+        ok,
+        q:current.questionText,
+        mode:modeLabel(current.mode),
+        your:shownSelected,
+        right:current.correctAnswer
+      });
+      recentHistory = recentHistory.slice(0,20);
+      renderHistory();
+    }
+
+    function renderHistory(){
+      const list = document.getElementById('historyList');
+      list.innerHTML = '';
+      if(!recentHistory.length){
+        const li = document.createElement('li');
+        li.textContent = t('noAnswersYet');
+        list.appendChild(li);
+        return;
+      }
+
+      recentHistory.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.ok ? 'OK' : 'X'} | ${item.mode} | ${item.q} | ${t('yourAnswer')}: ${item.your} | ${t('correctAnswer')}: ${item.right}`;
+        list.appendChild(li);
+      });
+    }
+
+    function showMessage(msg, good=true){
+      const fb = document.getElementById('feedback');
+      fb.className = 'feedback ' + (good ? 'correct' : 'incorrect');
+      fb.textContent = msg;
+      fb.style.display = 'block';
+    }
+
+    function startTimer(seconds){
+      timeLeft = seconds;
+      updateTimerText();
+      timerId = setInterval(() => {
+        timeLeft--;
+        updateTimerText();
+        if(timeLeft <= 0){
+          clearTimer();
+          if(!locked) answer('');
+        }
+      }, 1000);
+    }
+
+    function updateTimerText(){
+      document.getElementById('countdownText').textContent = timeLeft > 0 ? `${t('timeRemaining')}: ${timeLeft}s` : '';
+    }
+
+    function clearTimer(){
+      if(timerId){
+        clearInterval(timerId);
+        timerId = null;
+      }
+      document.getElementById('countdownText').textContent = '';
+    }
+
+
+    function escapeHtml(value){
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    async function answer(selected){
+      if(locked) return;
+      locked = true;
+      clearTimer();
+      total++;
+
+      const isOptionsQuestion = current.answerMode === 'options';
+      const isWriteQuestion = current.answerMode === 'write';
+      const selectedValue = isOptionsQuestion ? optionText(selected) : selected;
+      const selectedCode = isOptionsQuestion ? optionCode(selected, current.correctAnswerCode || current.targetCode || 'inf') : '';
+      const ok = isOptionsQuestion
+        ? (isCorrect(selectedValue, current.correctAnswer, current.mode) && selectedCode === (current.correctAnswerCode || current.targetCode || 'inf'))
+        : isCorrect(selectedValue, current.correctAnswer, current.mode);
+      const fb = document.getElementById('feedback');
+      const writeInput = document.getElementById('writeInput');
+      const writeResultBox = document.getElementById('writeResultBox');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if(isOptionsQuestion){
+        document.querySelectorAll('#optionsArea .answer').forEach(btn => {
+          const value = btn.dataset.answerValue || '';
+          const code = btn.dataset.answerCode || '';
+          btn.disabled = true;
+          btn.classList.remove('answer-correct', 'answer-wrong');
+
+          if(isCorrect(value, current.correctAnswer, current.mode) && code === String(current.correctAnswerCode || current.targetCode || '')){
+            btn.classList.add('answer-correct');
+          }
+
+          if(normalize(value) === normalize(selectedValue) && code === String(selectedCode) && !ok){
+            btn.classList.add('answer-wrong');
+          }
+        });
+
+        fb.className = 'feedback';
+        fb.textContent = '';
+        fb.style.display = 'none';
+      }
+
+      if(isWriteQuestion){
+        const typedText = selectedValue && String(selectedValue).trim() ? selectedValue : '(vacío)';
+        if(writeInput){
+          writeInput.disabled = true;
+          writeInput.style.display = 'none';
+        }
+        if(submitBtn){
+          submitBtn.disabled = true;
+          submitBtn.style.display = 'none';
+        }
+
+        if(writeResultBox){
+          writeResultBox.className = `write-result-box ${ok ? 'write-ok' : 'write-bad'}`;
+          writeResultBox.style.display = 'block';
+
+          if(ok){
+            writeResultBox.innerHTML = `<span class="write-typed-correct">${escapeHtml(typedText)}</span>`;
+          } else {
+            writeResultBox.innerHTML = `<span class="write-typed-wrong">${escapeHtml(typedText)}</span><span class="write-correct-answer">${t('correctAnswer')}: ${escapeHtml(current.correctAnswer)}</span>`;
+          }
+        }
+
+        fb.className = 'feedback';
+        fb.textContent = '';
+        fb.style.display = 'none';
+      }
+
+      if(ok){
+        correct++;
+        streak++;
+        bestStreak = Math.max(bestStreak, streak);
+        markVerbAsMastered(current.verb);
+        addHistory(true, selectedValue);
+      } else {
+        wrong++;
+        streak = 0;
+        if(!reviewRound) wrongQueue.push(current.verb);
+        addHistory(false, selectedValue);
+      }
+
+      updateStats();
+      saveState();
+      document.getElementById('nextBtn').style.display = 'inline-block';
+	  
+	  // Muestra el botón de pronunciar una vez respondida la pregunta
+const pronounceBtn = document.getElementById('pronounceBtn');
+if(pronounceBtn){
+  pronounceBtn.style.display = 'inline-block';
+}
+
+      const localFormsToken = ++formsRenderToken;
+      await renderFormsBlock(current.verb, localFormsToken);
+    }
+
+    function submitWrittenAnswer(){
+      if(locked) return;
+      answer(document.getElementById('writeInput').value);
+    }
+
+    async function nextQuestion(){
+      clearTimer();
+
+      if(maxQuestions !== 9999 && asked >= maxQuestions){
+        if(document.getElementById('reviewWrong').checked && wrongQueue.length && !reviewRound){
+          reviewRound = true;
+          pool = shuffle([...wrongQueue]);
+          asked = 0;
+          maxQuestions = wrongQueue.length;
+          wrongQueue = [];
+          showMessage(t('reviewStarted'), true);
+        } else {
+          finishGame();
+          return;
+        }
+      }
+
+      questionRenderToken++;
+      formsRenderToken++;
+
+      const localQuestionToken = questionRenderToken;
+
+      const verb = reviewRound
+        ? pool[asked % pool.length]
+        : pool[Math.floor(Math.random()*pool.length)];
+
+      current = await buildQuestionFromVerb(verb);
+      if(!current) return;
+
+      locked = false;
+      asked++;
+      renderQuestion();
+
+      await renderQuestionPronunciation(localQuestionToken);
+
+      const seconds = parseInt(document.getElementById('timerSelect').value, 10);
+      document.getElementById('timerText').textContent = seconds ? `${seconds} ${t('seconds')}` : t('noTimer');
+
+      if(seconds > 0) startTimer(seconds);
+
+if((document.getElementById('autoSpeak').checked || current.mode.startsWith('audio_')) && current.mode !== 'es_to_en'){
+  setTimeout(() => speakCurrent(), 150);
+}
+
+    }
+
+    async function startGame(){
+      pool = getFilteredVerbs();
+
+      if(!getSelectedModes().length){
+        alert(t('needMode'));
+        return;
+      }
+
+      if(pool.length < 1){
+        alert(t('noVerbs'));
+        return;
+      }
+
+      if(pool.length < 4 && document.getElementById('answerModeSelect').value !== 'write'){
+        alert(t('tooFew'));
+        return;
+      }
+
+      maxQuestions = parseInt(document.getElementById('questionCountSelect').value, 10);
+      correct = 0;
+      wrong = 0;
+      total = 0;
+      streak = 0;
+      bestStreak = 0;
+      asked = 0;
+      wrongQueue = [];
+      reviewRound = false;
+      recentHistory = [];
+
+      updateStats();
+      renderHistory();
+      updateMasteryUI();
+      saveState();
+
+      await nextQuestion();
+	  document.getElementById('questionText').classList.remove('blink');
+    }
+
+    function finishGame(){
+      clearTimer();
+      document.getElementById('promptText').textContent = t('gameFinished');
+      document.getElementById('questionText').textContent = `${t('finalResult')}: ${correct} / ${correct + wrong}`;
+      document.getElementById('translationText').textContent = '';
+      document.getElementById('ipaText').textContent = '';
+      document.getElementById('approxText').textContent = '';
+      document.getElementById('extraInfo').textContent = '';
+      document.getElementById('optionsArea').innerHTML = '';
+      document.getElementById('optionsArea').style.display = 'none';
+      document.getElementById('writeArea').style.display = 'none';
+      document.getElementById('formsPronBlock').innerHTML = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('pronounceBtn').style.display = 'none';
+      saveState();
+    }
+
+    function resetStats(){
+      correct = 0;
+      wrong = 0;
+      total = 0;
+      streak = 0;
+      bestStreak = 0;
+      asked = 0;
+      wrongQueue = [];
+      reviewRound = false;
+      recentHistory = [];
+
+      updateStats();
+      renderHistory();
+      clearTimer();
+
+      localStorage.removeItem(STATE_KEY);
+
+      document.getElementById('promptText').textContent = '';
+      document.getElementById('questionText').textContent = t('promptStart');
+      document.getElementById('translationText').textContent = '';
+      document.getElementById('ipaText').textContent = '';
+      document.getElementById('approxText').textContent = '';
+      document.getElementById('extraInfo').textContent = '';
+      document.getElementById('optionsArea').innerHTML = '';
+      document.getElementById('writeArea').style.display = 'none';
+      document.getElementById('feedback').style.display = 'none';
+      document.getElementById('formsPronBlock').innerHTML = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('pronounceBtn').style.display = 'none';
+    }
+
+    function saveState(){
+      if(!document.getElementById('saveProgress').checked) return;
+
+      const state = {
+        correct,
+        wrong,
+        total,
+        streak,
+        bestStreak,
+        recentHistory,
+        settings:{
+          uiLang,
+          selectedModes:getSelectedModes(),
+          answerMode:document.getElementById('answerModeSelect').value,
+          filter:document.getElementById('filterSelect').value,
+          verbCount:document.getElementById('verbCountSelect').value,
+          questionCount:document.getElementById('questionCountSelect').value,
+          timer:document.getElementById('timerSelect').value,
+          showIPA:document.getElementById('showIPA').checked,
+          showApprox:document.getElementById('showApprox').checked,
+          autoSpeak:document.getElementById('autoSpeak').checked,
+          reviewWrong:document.getElementById('reviewWrong').checked,
+          saveProgress:document.getElementById('saveProgress').checked,
+          voice:document.getElementById('voiceSelect').value
+        }
+      };
+
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STATE_KEY);
+        if(!raw) return;
+        const state = JSON.parse(raw);
+
+        correct = state.correct || 0;
+        wrong = state.wrong || 0;
+        total = state.total || 0;
+        streak = state.streak || 0;
+        bestStreak = state.bestStreak || 0;
+        recentHistory = state.recentHistory || [];
+
+        if(state.settings){
+          uiLang = state.settings.uiLang || 'en';
+          document.getElementById('uiLangSelect').value = uiLang;
+
+          if(Array.isArray(state.settings.selectedModes)){
+            document.querySelectorAll('.modeCheck').forEach(ch => {
+              ch.checked = state.settings.selectedModes.includes(ch.value);
+            });
+          }
+
+          document.getElementById('answerModeSelect').value = state.settings.answerMode || 'mixed';
+          document.getElementById('filterSelect').value = state.settings.filter || 'all';
+          document.getElementById('verbCountSelect').value = state.settings.verbCount || '9999';
+          document.getElementById('questionCountSelect').value = state.settings.questionCount || '20';
+          document.getElementById('timerSelect').value = state.settings.timer || '0';
+          document.getElementById('showIPA').checked = state.settings.showIPA !== false;
+          document.getElementById('showApprox').checked = state.settings.showApprox !== false;
+          document.getElementById('autoSpeak').checked = !!state.settings.autoSpeak;
+          document.getElementById('reviewWrong').checked = !!state.settings.reviewWrong;
+          document.getElementById('saveProgress').checked = state.settings.saveProgress !== false;
+        }
+
+        document.getElementById('appTitle').textContent = t('titleDefault');
+        document.title = t('titleDefault');
+      }catch(e){
+        console.error(e);
+      }
+    }
+
+    function initVoices(){
+      const select = document.getElementById('voiceSelect');
+      voices = speechSynthesis.getVoices();
+      select.innerHTML = '';
+
+      if(!voices.length){
+        const op = document.createElement('option');
+        op.value = '';
+        op.textContent = 'System voice';
+        select.appendChild(op);
+        return;
+      }
+
+      const enVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
+      const finalVoices = enVoices.length ? enVoices : voices;
+
+      finalVoices.forEach(v => {
+        const op = document.createElement('option');
+        op.value = v.name;
+        op.textContent = `${v.name} (${v.lang})`;
+        select.appendChild(op);
+      });
+
+      try{
+        const raw = localStorage.getItem(STATE_KEY);
+        if(raw){
+          const state = JSON.parse(raw);
+          if(state.settings && state.settings.voice) select.value = state.settings.voice;
+        }
+      }catch(e){}
+    }
+
+function speakCurrent(force = false){
+  if(!current || !window.speechSynthesis) return;
+  if(current.mode === 'es_to_en' && !force) return;
+
+  const utter = new SpeechSynthesisUtterance(current.speakText);
+  const chosen = document.getElementById('voiceSelect').value;
+
+  if(chosen){
+    const voice = voices.find(v => v.name === chosen);
+    if(voice) utter.voice = voice;
+  }
+
+  utter.lang = utter.voice?.lang || 'en-US';
+  utter.rate = 0.9;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+  saveState();
+}
+
+let currentLang = 'es';
+
+function toggleLanguage() {
+  currentLang = currentLang === 'es' ? 'en' : 'es';
+  
+  // Guardar la preferencia en localStorage
+  localStorage.setItem('language', currentLang);
+  
+  const btn = document.getElementById('toggleLangBtn');
+  btn.textContent = currentLang === 'es' ? 'Cambiar a Ingles' : 'Switch to Spanish';
+  applyUILanguage(currentLang);
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+  
+  // Actualizar texto del botón si aplica
+  const btn = document.getElementById('toggleDarkBtn');
+  if (btn) btn.innerText = isDark ? "Modo Oscuro: ON" : "Modo Oscuro: OFF";
+}
+
+// Al cargar la página, restaurar modo oscuro
+if (localStorage.getItem('darkMode') === 'enabled') {
+  document.body.classList.add('dark-mode');
+  window.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('toggleDarkBtn');
+    if (btn) btn.innerText = "Modo Oscuro: OFF".replace("OFF", "ON"); // O ajusta tu texto directo
+  });
+}
+
+    function renderIpaLegend(){
+      const ipaData = {
+        es: {
+          summary: 'Guía rápida de símbolos IPA',
+          intro: 'Esta guía cubre los símbolos del inglés que más suelen aparecer en la app.',
+          symbol: 'Símbolo',
+          idea: 'Idea aproximada',
+          example: 'Ejemplo orientativo',
+          rows: [
+            ['iː','i larga','see'],
+            ['ɪ','i corta','sit'],
+            ['e','e','bed'],
+            ['æ','a abierta','cat'],
+            ['ʌ','a neutra','cup'],
+            ['ɑː','a larga','father'],
+            ['ɒ','o corta','hot'],
+            ['ɔː','o larga','law'],
+            ['ʊ','u corta','book'],
+            ['uː','u larga','food'],
+            ['ə','uh','about'],
+            ['ɜː','er larga','bird'],
+            ['eɪ','ei','day'],
+            ['aɪ','ai','my'],
+            ['ɔɪ','oi','boy'],
+            ['aʊ','au','now'],
+            ['oʊ','ou','go'],
+            ['θ','th sorda','think'],
+            ['ð','th sonora','this'],
+            ['ʃ','sh','she'],
+            ['ʒ','zh','measure'],
+            ['tʃ','ch','chair'],
+            ['dʒ','j suave','job'],
+            ['ŋ','ng nasal','sing'],
+            ['j','y','yes'],
+            ['ˈ','sílaba tónica principal','indica dónde va el acento'],
+            ['ˌ','acento secundario','menos fuerte que ˈ']
+          ]
+        },
+        en: {
+          summary: 'Quick guide to IPA symbols',
+          intro: 'This guide covers the English symbols that most often appear in the app.',
+          symbol: 'Symbol',
+          idea: 'Approximate idea',
+          example: 'Example',
+          rows: [
+            ['iː','long i','see'],
+            ['ɪ','short i','sit'],
+            ['e','e sound','bed'],
+            ['æ','open a','cat'],
+            ['ʌ','neutral a','cup'],
+            ['ɑː','long a','father'],
+            ['ɒ','short o','hot'],
+            ['ɔː','long o','law'],
+            ['ʊ','short u','book'],
+            ['uː','long u','food'],
+            ['ə','uh','about'],
+            ['ɜː','long er','bird'],
+            ['eɪ','ei','day'],
+            ['aɪ','ai','my'],
+            ['ɔɪ','oi','boy'],
+            ['aʊ','au','now'],
+            ['oʊ','ou','go'],
+            ['θ','voiceless th','think'],
+            ['ð','voiced th','this'],
+            ['ʃ','sh','she'],
+            ['ʒ','zh','measure'],
+            ['tʃ','ch','chair'],
+            ['dʒ','soft j','job'],
+            ['ŋ','nasal ng','sing'],
+            ['j','y sound','yes'],
+            ['ˈ','main stressed syllable','marks the main stress'],
+            ['ˌ','secondary stress','weaker than ˈ']
+          ]
+        }
+      };
+
+      const L = ipaData[uiLang];
+      const el = document.getElementById('ipaLegend');
+      if(!el) return;
+
+      el.innerHTML = `
+        <summary>${L.summary}</summary>
+        <div class="small" style="margin-bottom:10px;">
+          ${L.intro}
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>${L.symbol}</th>
+              <th>${L.idea}</th>
+              <th>${L.example}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${L.rows.map(r => `
+              <tr>
+                <td><code>${r[0]}</code></td>
+                <td>${r[1]}</td>
+                <td>${r[2]}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+async function applyUILanguage(lang){
+  uiLang = lang;
+
+  const map = {
+    summaryInterface:'summaryInterface',
+    summaryModes:'summaryModes',
+    summaryFilters:'summaryFilters',
+    summaryPron:'summaryPron',
+    summaryProgress:'summaryProgress',
+    summaryHistory:'summaryHistory',
+    labelUILang:'labelUILang',
+    labelModes:'labelModes',
+    labelAnswerType:'labelAnswerType',
+    labelVoice:'labelVoice',
+    labelFilter:'labelFilter',
+    labelVerbCount:'labelVerbCount',
+    labelQuestionCount:'labelQuestionCount',
+    labelTimer:'labelTimer',
+    labelMasteryProgress:'labelMasteryProgress',
+    labelMastered:'labelMastered',
+    labelUnmastered:'labelUnmastered',
+    statCorrectLabel:'statCorrect',
+    statWrongLabel:'statWrong',
+    statAnsweredLabel:'statAnswered',
+    statAccuracyLabel:'statAccuracy',
+    statStreakLabel:'statStreak',
+    statBestStreakLabel:'statBestStreak',
+    masteryCountLabel:'masteryCountLabel',
+    masteryPercentLabel:'masteryPercentLabel',
+    showIPAText:'showIPA',
+    showApproxText:'showApprox',
+    autoSpeakText:'autoSpeak',
+    reviewWrongText:'reviewWrong',
+    saveProgressText:'saveProgress'
+  };
+
+  Object.entries(map).forEach(([id,key]) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = t(key);
+  });
+
+  const setIfExists = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+
+  setIfExists('startBtn', t('start'));
+  setIfExists('resetSessionBtn', t('resetSession'));
+  setIfExists('resetMasteryBtn', t('resetMastery'));
+  setIfExists('submitBtn', t('submit'));
+  setIfExists('pronounceBtn', t('pronounce'));
+  setIfExists('nextBtn', t('next'));
+  setIfExists('timeLabelInline', t('time'));
+  setIfExists('footerText', t('footer'));
+
+  const writeInput = document.getElementById('writeInput');
+  if(writeInput) writeInput.placeholder = t('typeHere');
+
+  document.querySelector('#answerModeSelect option[value="mixed"]').textContent = t('answerTypeMixed');
+  document.querySelector('#answerModeSelect option[value="options"]').textContent = t('answerTypeOptions');
+  document.querySelector('#answerModeSelect option[value="write"]').textContent = t('answerTypeWrite');
+
+  document.querySelector('#filterSelect option[value="all"]').textContent = t('filterAll');
+  document.querySelector('#filterSelect option[value="regular"]').textContent = t('filterRegular');
+  document.querySelector('#filterSelect option[value="irregular"]').textContent = t('filterIrregular');
+  document.querySelector('#filterSelect option[value="mastered"]').textContent = t('filterMastered');
+  document.querySelector('#filterSelect option[value="unmastered"]').textContent = t('filterUnmastered');
+
+  document.querySelector('#verbCountSelect option[value="9999"]').textContent = t('allLoaded');
+  document.querySelector('#questionCountSelect option[value="9999"]').textContent = t('unlimited');
+  document.querySelector('#timerSelect option[value="0"]').textContent = t('noTimer');
+
+  ['10','15','20','30'].forEach(v => {
+    const o = document.querySelector(`#timerSelect option[value="${v}"]`);
+    if(o) o.textContent = `${v} ${t('seconds')}`;
+  });
+
+  document.querySelectorAll('[data-mode-label]').forEach(el => {
+    el.textContent = modeLabel(el.getAttribute('data-mode-label'));
+  });
+
+  document.querySelectorAll('[data-ui-text]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-ui-text'));
+  });
+
+  document.getElementById('appTitle').textContent = t('titleDefault');
+  document.title = t('titleDefault');
+  document.getElementById('appSubtitle').textContent = t('subtitle');
+
+  renderIpaLegend();
+
+  updateStats();
+  renderHistory();
+  updateMasteryUI();
+
+  if(!current){
+    document.getElementById('promptText').textContent = '';
+    const qText = document.getElementById('questionText');
+    qText.textContent = t('promptStart');
+    qText.classList.add('blink');
+    document.getElementById('translationText').textContent = '';
+    document.getElementById('pronounceBtn').style.display = 'none';
+	
+	
+	const modeTag = document.getElementById('modeTag');
+    if (modeTag) {
+        // Usa las claves que tengas en tu diccionario de traducción. 
+        // Si no tienes claves para esto, puedes usar: uiLang === 'es' ? 'Modo actual: --' : 'Current mode: --'
+        modeTag.textContent = t('currentMode') + ': --'; 
+    }
+
+    const answerTag = document.getElementById('answerTag');
+    if (answerTag) {
+        answerTag.textContent = t('answer') + ': --';
+    }
+
+    const timerText = document.getElementById('timerText');
+    if (timerText) {
+        timerText.textContent = t('noTimer');
+    }
+	
+	
+	
+	
+	
+	
+  } else {
+  
+    current = await buildQuestionFromVerb(current.verb, current.mode, current.answerMode);
+    if(current){
+      questionRenderToken++;
+      const localQuestionToken = questionRenderToken;
+      renderQuestion();
+      await renderQuestionPronunciation(localQuestionToken);
+    }
+  }
+
+  saveState();
+}
+
+
+    document.addEventListener('keydown', e => {
+      if(e.key !== 'Enter') return;
+      const nextBtn = document.getElementById('nextBtn');
+      if(nextBtn.style.display !== 'none'){
+        e.preventDefault();
+        nextQuestion();
+        return;
+      }
+      if(current && current.answerMode === 'write' && document.activeElement === document.getElementById('writeInput')){
+        e.preventDefault();
+        submitWrittenAnswer();
+      }
+    });
+
+    ['answerModeSelect','filterSelect','verbCountSelect','questionCountSelect','timerSelect','showIPA','showApprox','autoSpeak','reviewWrong','saveProgress','voiceSelect']
+      .forEach(id => document.getElementById(id).addEventListener('change', saveState));
+
+    document.querySelectorAll('.modeCheck').forEach(ch => ch.addEventListener('change', saveState));
+	document.getElementById('pronounceBtn').addEventListener('click', () => {
+  speakCurrent(true);
+});
+
+
+    loadMastered();
+    loadPronCache();
+    loadState();
+    updateStats();
+    renderHistory();
+    updateMasteryUI();
+    initVoices();
+    applyUILanguage(uiLang);
+
+    if('speechSynthesis' in window){
+      speechSynthesis.onvoiceschanged = initVoices;
+    }
+  </script>
+</body>
+</html>
