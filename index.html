@@ -3295,51 +3295,54 @@ if((document.getElementById('autoSpeak').checked || current.mode.startsWith('aud
     }
 
     function initVoices(){
-      const select = document.getElementById('voiceSelect');
-      voices = speechSynthesis.getVoices();
-      select.innerHTML = '';
+  const select = document.getElementById('voiceSelect');
+  if (!select) return;
 
-      if(!voices.length){
-        const op = document.createElement('option');
-        op.value = '';
-        op.textContent = 'System voice';
-        select.appendChild(op);
-        return;
-      }
+  voices = speechSynthesis.getVoices();
+  select.innerHTML = '';
 
-      const enVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
-      const finalVoices = enVoices.length ? enVoices : voices;
+  if(!voices.length){
+    const op = document.createElement('option');
+    op.value = '';
+    op.textContent = 'System voice';
+    select.appendChild(op);
+    return;
+  }
 
-      finalVoices.forEach(v => {
-        const op = document.createElement('option');
-        op.value = v.name;
-        op.textContent = `${v.name} (${v.lang})`;
-        select.appendChild(op);
-      });
+  const enVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
+  const finalVoices = enVoices.length ? enVoices : voices;
 
-      try{
-        const raw = localStorage.getItem(STATE_KEY);
-        if(raw){
-          const state = JSON.parse(raw);
-          if(state.settings && state.settings.voice) select.value = state.settings.voice;
-        }
-      }catch(e){}
-	// --- FORZAR VALOR GUARDADO A PRUEBA DE FALLOS ---
+  finalVoices.forEach(v => {
+    const op = document.createElement('option');
+    op.value = v.name;
+    op.textContent = `${v.name} (${v.lang})`;
+    select.appendChild(op);
+  });
+
+  try{
+    const raw = localStorage.getItem(STATE_KEY);
+    if(raw){
+      const state = JSON.parse(raw);
+      if(state.settings && state.settings.voice) select.value = state.settings.voice;
+    }
+  }catch(e){}
+
+  // ==========================================
+  // PEGA ESTO JUSTO AQUÍ (ANTES DE LA ÚLTIMA LLAVE)
+  // ==========================================
   setTimeout(() => {
     try {
       const raw = localStorage.getItem(STATE_KEY);
       if(raw) {
         const state = JSON.parse(raw);
         if(state.settings && state.settings.voice) {
-          const select = document.getElementById('voiceSelect');
-          if (select) {
-            select.value = state.settings.voice;
-            // Si el navegador no encuentra exactamente el mismo texto exacto, 
-            // al menos seleccionamos la primera opción que coincida parcialmente
-            if (select.value !== state.settings.voice) {
-              for(let opt of select.options) {
+          const sel = document.getElementById('voiceSelect');
+          if (sel) {
+            sel.value = state.settings.voice;
+            if (sel.value !== state.settings.voice) {
+              for(let opt of sel.options) {
                 if(opt.value.includes(state.settings.voice) || state.settings.voice.includes(opt.value)) {
-                  select.value = opt.value;
+                  sel.value = opt.value;
                   break;
                 }
               }
@@ -3349,8 +3352,9 @@ if((document.getElementById('autoSpeak').checked || current.mode.startsWith('aud
       }
     } catch(e) {}
   }, 100);
-}
+  // ==========================================
 
+} // <--- Esta es la última llave de la función initVoices()
 // Asegurarnos de dispararlo también al cargar la ventana
 if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = initVoices;
