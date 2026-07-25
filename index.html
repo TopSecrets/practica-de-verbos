@@ -3294,7 +3294,7 @@ if((document.getElementById('autoSpeak').checked || current.mode.startsWith('aud
       }
     }
 
-    function initVoices(){
+function initVoices(){
       const select = document.getElementById('voiceSelect');
       voices = speechSynthesis.getVoices();
       select.innerHTML = '';
@@ -3321,7 +3321,9 @@ if((document.getElementById('autoSpeak').checked || current.mode.startsWith('aud
         const raw = localStorage.getItem(STATE_KEY);
         if(raw){
           const state = JSON.parse(raw);
-          if(state.settings && state.settings.voice) select.value = state.settings.voice;
+          if(state.settings && state.settings.voice) {
+            select.value = state.settings.voice;
+          }
         }
       }catch(e){}
     }
