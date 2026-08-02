@@ -878,44 +878,25 @@ body.dark-mode .answerTranslation {
 }	  
 
     /* ==========================================
-       FORZAR FUENTES EN ELEMENTOS INTERACTIVOS (MÓVIL)
+       CORRECCIÓN FINAL DE FUENTES (MÓVIL)
        ========================================== */
 
-    /* 1. Todos los botones */
+    /* 1. BOTONES Y SELECTORES (Elementos que se veían finos) 
+       Usamos fuente del sistema para asegurar que el Bold se vea grueso */
     button,
     .ui-btn,
     #toggleLangBtn,
     #toggleDarkBtn,
-    button[id*="Lang"],
-    button[id*="Dark"] {
+    select,
+    input[type="text"] {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-      font-weight: 700 !important;
-      font-size: 16px !important; /* Aumentar ligeramente el tamaño para mejor legibilidad */
-      -webkit-font-smoothing: antialiased !important;
-      -moz-osx-font-smoothing: grayscale !important;
-      text-rendering: optimizeLegibility !important;
-    }
-
-    /* 2. Selectores (dropdowns) */
-    select {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-      font-weight: 600 !important; /* 600 es suficiente para selectores */
+      font-weight: 700 !important; /* Fuerza el Bold real */
       font-size: 16px !important;
       -webkit-font-smoothing: antialiased !important;
       -moz-osx-font-smoothing: grayscale !important;
     }
 
-    /* 3. Campos de texto (inputs) */
-    input[type="text"],
-    input[type="number"] {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-      font-weight: 600 !important;
-      font-size: 16px !important;
-      -webkit-font-smoothing: antialiased !important;
-      -moz-osx-font-smoothing: grayscale !important;
-    }
-
-    /* 4. Textos dentro de las opciones de respuesta */
+    /* 2. OPCIONES DE RESPUESTA (Texto dentro de los cuadros) */
     .answerMain,
     .answerTranslation,
     .answerIpa,
@@ -926,28 +907,35 @@ body.dark-mode .answerTranslation {
       -moz-osx-font-smoothing: grayscale !important;
     }
 
-    /* 5. Títulos de acordeones */
-    .accordion summary {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-      font-weight: 700 !important;
+    /* 3. MANTENER 'INTER' EN TÍTULOS Y ACORDEONES (Que se veían bien) 
+       Aquí no cambiamos la fuente, solo aseguramos el peso */
+    .accordion summary,
+    h1, h2, h3, h4,
+    .stat, .label, .meta {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important; /* Mantenemos Inter */
+      font-weight: 700 !important; /* Aseguramos que sea Bold */
       -webkit-font-smoothing: antialiased !important;
-      -moz-osx-font-smoothing: grayscale !important;
     }
 
-    /* 6. Asegurar que en MODO OSCURO se mantenga el grosor */
+    /* 4. MODO OSCURO: Asegurar que el grosor se mantenga en todos */
     body.dark-mode button,
     body.dark-mode .ui-btn,
-    body.dark-mode #toggleLangBtn,
-    body.dark-mode #toggleDarkBtn,
     body.dark-mode select,
-    body.dark-mode input[type="text"],
     body.dark-mode .answerMain,
     body.dark-mode .answerTranslation,
     body.dark-mode .answerIpa,
-    body.dark-mode .answerApprox,
-    body.dark-mode .accordion summary {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    body.dark-mode .answerApprox {
       font-weight: 700 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    
+    /* En modo oscuro, los títulos también deben ser gruesos */
+    body.dark-mode .accordion summary,
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3 {
+      font-weight: 700 !important;
+      font-family: 'Inter', sans-serif !important;
     }
 
   </style>
