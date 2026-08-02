@@ -1164,11 +1164,35 @@ document.addEventListener('toggle', (event) => {
     });
   });
 	  
+
   // Cargar el idioma guardado al iniciar la aplicación
-window.addEventListener('DOMContentLoaded', () => {
-  const savedLang = localStorage.getItem('language');
-  if (savedLang) {
+  window.addEventListener('DOMContentLoaded', () => {
+    // 1. Obtener idioma guardado o establecer por defecto ('es')
+    let savedLang = localStorage.getItem('language');
+    if (!savedLang) {
+      savedLang = 'es'; // Por defecto en Español
+      localStorage.setItem('language', savedLang);
+    }
+    
     currentLang = savedLang;
+    
+    // 2. Actualizar el texto del botón INMEDIATAMENTE
+    const btn = document.getElementById('toggleLangBtn');
+    if (btn) {
+      // Lógica idéntica a toggleLanguage para mantener consistencia
+      btn.textContent = currentLang === 'es' ? 'Cambiar a Ingles' : 'Switch to Spanish';
+    }
+    
+    // 3. Aplicar el idioma a toda la interfaz
+    applyUILanguage(currentLang);
+  });
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'es' ? 'en' : 'es';
+    
+    // Guardar la preferencia en localStorage
+    localStorage.setItem('language', currentLang);
+    
     const btn = document.getElementById('toggleLangBtn');
     if (btn) {
       btn.textContent = currentLang === 'es' ? 'Cambiar a Ingles' : 'Switch to Spanish';
