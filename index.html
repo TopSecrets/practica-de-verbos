@@ -35,6 +35,9 @@
       color: var(--text);
       padding: 16px;
       transition: background-color 0.2s ease, color 0.2s ease;
+      text-rendering: optimizeLegibility; /* Mejora el renderizado de texto */
+      -webkit-text-size-adjust: 100%;    /* Evita que el móvil cambie el tamaño */
+	
     }
 
     .wrap {
@@ -794,6 +797,66 @@ body.dark-mode .write-typed-wrong {
   color: #fca5a5 !important;
 }	  
 
+    /* ==========================================
+       CORRECCIÓN DE FUENTES EN MÓVILES (Android/iOS)
+       ========================================== */
+
+    /* Fuerza a todos los textos a usar un grosor alto y renderizado nítido */
+    body, h1, h2, h3, p, span, div, button, select, input, label, .pron, .translation, .answerMain, .answerTranslation, .answerIpa, .answerApprox, .summaryInterface, .summaryModes, .summaryFilters, .summaryPron, .summaryProgress, .summaryHistory, .ui-btn {
+      font-weight: 700 !important; /* Fuerza el grosor a 700 (Bold) */
+      -webkit-font-smoothing: antialiased; /* Desactiva suavizado excesivo */
+      text-rendering: optimizeLegibility; /* Optimiza el renderizado */
+      text-shadow: 0 0 0.1px rgba(0,0,0,0.1); /* Truco sutil para engrosar letras en móviles */
+    }
+
+    /* En modo oscuro, ajusta el text-shadow para que no se vea un borde blanco */
+    body.dark-mode body,
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode p,
+    body.dark-mode span,
+    body.dark-mode div,
+    body.dark-mode button,
+    body.dark-mode select,
+    body.dark-mode input,
+    body.dark-mode label,
+    body.dark-mode .pron,
+    body.dark-mode .translation,
+    body.dark-mode .answerMain,
+    body.dark-mode .answerTranslation,
+    body.dark-mode .answerIpa,
+    body.dark-mode .answerApprox,
+    body.dark-mode .summaryInterface,
+    body.dark-mode .summaryModes,
+    body.dark-mode .summaryFilters,
+    body.dark-mode .summaryPron,
+    body.dark-mode .summaryProgress,
+    body.dark-mode .summaryHistory,
+    body.dark-mode .ui-btn {
+      text-shadow: 0 0 0.1px rgba(255,255,255,0.1); /* Sombra sutil en modo oscuro */
+    }
+
+    /* ==========================================
+       COLORES ESPECÍFICOS PARA MODO OSCURO
+       (Pronunciación y Traducción)
+       ========================================== */
+
+    /* Texto verde (Pronunciación/IPA) en modo oscuro */
+    body.dark-mode .pron,
+    body.dark-mode .answerIpa,
+    body.dark-mode .answerApprox {
+      color: #2dd4bf !important; /* Verde azulado brillante */
+      text-shadow: 0 0 2px rgba(45, 212, 191, 0.3); /* Sutil resplandor para mejor lectura */
+    }
+
+    /* Texto morado (Traducción) en modo oscuro */
+    body.dark-mode .translation,
+    body.dark-mode .answerTranslation {
+      color: #a78bfa !important; /* Violeta pastel suave */
+      text-shadow: 0 0 2px rgba(167, 139, 250, 0.3); /* Sutil resplandor */
+    }
+	  
 /* ==========================================
    COLORES ESPECÍFICOS PARA MODO OSCURO
    (Pronunciación y Traducción)
